@@ -10,8 +10,21 @@ namespace DungeonExplorer
 
         public Game()
         {
-            // Initialize the game with one room and one player
-
+            // setup player character
+            string name;
+            Console.WriteLine("what would you like to be called");
+            while (true)
+            {
+                name = Console.ReadLine();
+                if (name.Length > 16)
+                {
+                    Console.WriteLine("please enter a name containing 16 characters or less");
+                }
+                else { break; }
+            }
+            player = new Player(name, 100);
+            player.DisplayInventoryContents();
+            Console.ReadKey();
         }
         public void Start()
         {

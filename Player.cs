@@ -1,25 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DungeonExplorer
 {
-    public class Player
+    public class Player : LivingEntity
     {
-        public string Name { get; private set; }
-        public int Health { get; private set; }
-        private List<string> inventory = new List<string>();
+        private Dictionary<string, List<string>> inventory = new Dictionary<string, List<string>>
+        {
+            {"weapons", new List<string> { "sword", "shield" } },
+            {"armour", new List<string> { "cloth trousers", "cloth shirt" } },
+            {"consumables", new List<string> { "health potion" } },
+            {"misc", new List<string> { "rusted key" } }
+        };
 
-        public Player(string name, int health) 
+        public Player(string name, int maxHealth) 
         {
             Name = name;
-            Health = health;
+            MaxHealth = maxHealth;
+            Health = MaxHealth;
         }
         public void PickUpItem(string item)
         {
-
+            
         }
-        public string InventoryContents()
+        public void DisplayInventoryContents()
         {
-            return string.Join(", ", inventory);
+            foreach (var category in inventory)
+            {
+                Console.WriteLine(category.Key.ToUpper() + ":");
+                int counter = 1;
+                foreach (var item in category.Value)
+                {
+                    Console.WriteLine($"{counter}. {item}");
+                    counter++;
+                }
+            }
         }
     }
 }
