@@ -10,8 +10,20 @@ namespace DungeonExplorer
     {
         static void Main(string[] args)
         {
-            Game game = new Game();
-            game.Start();
+            try
+            {
+                Game game = new Game();
+                game.Start();
+            }
+            catch
+            {
+                Console.WriteLine("AN UNEXPECTED ERROR HAS OCCURED");
+            }
+            finally
+            {
+                Console.WriteLine("end of game, press any key to exit...");
+                Console.ReadKey();
+            }
         }
     }
 }
