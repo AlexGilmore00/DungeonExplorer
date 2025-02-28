@@ -6,7 +6,7 @@ namespace DungeonExplorer
     internal class Game
     {
         private Player player;
-        private Room currentRoom;
+        private DefaultRoom currentRoom;
 
         public Game()
         {
@@ -23,8 +23,6 @@ namespace DungeonExplorer
                 else { break; }
             }
             player = new Player(name, 100);
-            player.DisplayInventoryContents();
-            Console.ReadKey();
         }
         public void Start()
         {
