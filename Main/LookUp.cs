@@ -18,11 +18,15 @@ namespace DungeonExplorer
         public LookUp() { }
 
         public static LivingEntity GenerateRandomEnemy()
+        // not fully implemented yet but will eventually return a random enemy class
+        // taht is a child of LivingEntity
         {
             return new TestEnemy();
         }
 
         public static ParentContainer GenerateRandomContainer()
+        // not fully implemented yet but will eventually return a random container class
+        // taht is a child of ParentContainer
         {
             return new TestContainer();
         }
