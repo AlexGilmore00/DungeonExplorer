@@ -26,6 +26,8 @@ namespace DungeonExplorer
         }
         public void Start()
         {
+
+            Test.TestRoomGeneration(0);
             // Change the playing logic into true and populate the while loop
             bool playing = false;
             while (playing)

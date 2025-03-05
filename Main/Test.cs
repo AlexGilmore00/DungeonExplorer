@@ -26,6 +26,10 @@ namespace DungeonExplorer
             {
                 Console.WriteLine(container.Name);
             }
+
+            // test display description method
+            Console.WriteLine("\n testing Room.DisplayDescription \n");
+            room.DisplayDescription();
         }
     }
 }
