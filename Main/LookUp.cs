@@ -23,7 +23,7 @@ namespace DungeonExplorer
         //
         //
 
-        public static LivingEntity GenerateRandomEnemy()
+        public static ParentEnemy GenerateRandomEnemy()
         // not fully implemented yet but will eventually return a random enemy class
         // taht is a child of LivingEntity
         {

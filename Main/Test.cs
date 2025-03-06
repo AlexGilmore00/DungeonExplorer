@@ -12,10 +12,10 @@ namespace DungeonExplorer
 
         public static void TestRoomGeneration(int difficulty)
         {
-            DefaultRoom room = new DefaultRoom(difficulty);
+            ParentRoom room = new DefaultRoom(difficulty);
             // see if enemies are added to the Enemies array correctly
             Console.WriteLine($"there should be {room.Enemies.Length} enemies...");
-            foreach (LivingEntity enemy in room.Enemies)
+            foreach (ParentEnemy enemy in room.Enemies)
             {
                 Console.WriteLine(enemy.Name);
             }

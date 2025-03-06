@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    public class TestEnemy : LivingEntity
+    public class TestEnemy : ParentEnemy
     {
         public TestEnemy()
         {
