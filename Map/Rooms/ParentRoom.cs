@@ -39,6 +39,7 @@ namespace DungeonExplorer
                     Console.WriteLine(container.Name);
                 }
             }
+            Console.WriteLine();
         }
     }
 }

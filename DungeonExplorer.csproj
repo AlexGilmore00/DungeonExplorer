@@ -53,6 +53,7 @@
     <Compile Include="Map\Containers\ParentContainer.cs" />
     <Compile Include="Map\Containers\TestContainer.cs" />
     <Compile Include="entities\Enemies\ParentEnemy.cs" />
+    <Compile Include="Map\Level.cs" />
     <Compile Include="Map\Rooms\ParentRoom.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Map\Rooms\DefaultRoom.cs" />
