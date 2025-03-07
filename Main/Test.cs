@@ -31,5 +31,10 @@ namespace DungeonExplorer
             Console.WriteLine("\n testing Room.DisplayDescription \n");
             room.DisplayDescription();
         }
+
+        public static void GenerateNewRoom(Level level, int difficulty)
+        {
+            level.ChanceCurrentRoom(new DefaultRoom(difficulty));
+        }
     }
 }

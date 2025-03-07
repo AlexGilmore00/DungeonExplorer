@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    internal class Level
+    public class Level
     // when fullt completethis class will generate a 2d array filled woth rooms depending on the difficulty
     // it willl hold info in the current active room as well as the layout of the map
     {
@@ -18,6 +18,12 @@ namespace DungeonExplorer
             // temporary for testing
             _difficulty = difficulty;
             CurrentRoom = new DefaultRoom(_difficulty);
+        }
+
+        public void ChanceCurrentRoom(ParentRoom newRoom)
+        // changes the current room to the new room
+        {
+            CurrentRoom = newRoom;
         }
     }
 }
