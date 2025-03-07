@@ -44,6 +44,12 @@ namespace DungeonExplorer
                         // load new room
                         this._currentRoom = currentLevel.CurrentRoom;
                         EnterRoomMenu(currentLevel);
+                        // end the game if the player dies
+                        if (_player.IsDead)
+                        {
+                            Console.WriteLine("you have died");
+                            return;
+                        }
                     }
                 }
             }
@@ -88,6 +94,8 @@ namespace DungeonExplorer
                         if (_currentRoom.Enemies.Length > 0)
                         {
                             ChooseEnemyToFight();
+                            // exit the subroutine of the player dies during the fight
+                            if (_player.IsDead) { return; }
                         }
                         break;
                     // !!FOR TESTING ONLY!!
@@ -121,7 +129,7 @@ namespace DungeonExplorer
                     validInputs.Add(counter);
                     counter++;
                 }
-                Console.WriteLine("[r] return to previous menu");
+                Console.WriteLine("[r] return to previous menu\n");
 
                 //get user input
                 ConsoleKeyInfo input = Console.ReadKey(true);
@@ -132,6 +140,12 @@ namespace DungeonExplorer
                     // check if the inputted number is a valid input
                     if (validInputs.Contains(numInput))
                     {
+                        // make sure enemy isnt already dead
+                        if (_currentRoom.Enemies[numInput - 1].IsDead)
+                        {
+                            Console.WriteLine("this enemy is already dead\n");
+                            continue;
+                        }
                         // call to enter battle with the selected enemy
                         StartBattle(_player, _currentRoom.Enemies[numInput - 1]);
                         // make sure this subroutine ends so we return back to the main
@@ -161,8 +175,50 @@ namespace DungeonExplorer
 
         private void StartBattle(Player player, ParentEnemy enemy)
         {
-            Console.WriteLine(player.Name);
-            Console.WriteLine(enemy.Name);
+            while (!player.IsDead && !enemy.IsDead)
+            {
+                Console.WriteLine($"{player.Name} has {player.Health}/{player.MaxHealth}\n" +
+                    $"{enemy.Name} has {enemy.Health}/{enemy.MaxHealth} health\n");
+                BeginPlayerBattleTurn(player, enemy);
+                BeginEnemyBattleTurn(player, enemy);
+            }
+            if (enemy.IsDead)
+            {
+                Console.WriteLine($"you have killed {enemy.Name}\n" +
+                    $"you have {player.Health}/{player.MaxHealth} health");
+            }
+        }
+
+        private void BeginPlayerBattleTurn(Player player, ParentEnemy enemy)
+        // acts out the players turn during a battle with the enemy in the enemy parameter
+        {
+            while (true)
+            {
+                Console.WriteLine("what action would you like to take?\n" +
+                    "[1] attack enemy\n");
+
+                ConsoleKeyInfo input = Console.ReadKey(true);
+
+                // return after every valid action to end turn
+                switch (input.Key)
+                {
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        player.DealDamageTo(player, enemy, true);
+                        return;
+                    default:
+                        Console.WriteLine("unknown command...");
+                        break;
+                }
+            }
+        }
+
+        private void BeginEnemyBattleTurn(Player player, ParentEnemy enemy)
+        // not fully implemented but works while the enemies are still simple
+        // once complete this should also allow enemies to choose a random move
+        // from thei aresenal
+        {
+            enemy.DealDamageTo(player, enemy, false);
         }
     }
 }

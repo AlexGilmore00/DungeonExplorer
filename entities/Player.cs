@@ -18,6 +18,10 @@ namespace DungeonExplorer
             Name = name;
             MaxHealth = maxHealth;
             Health = MaxHealth;
+
+            // TEMPORARY
+            CurrentAtkDmg = 11;
+            CurrentDefence = 5;
         }
         public void PickUpItem(string item)
         {
