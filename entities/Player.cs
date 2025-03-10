@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace DungeonExplorer
 {
     public class Player : LivingEntity
     {
-        private Dictionary<string, List<string>> _inventory = new Dictionary<string, List<string>>
-        {
-            {"weapons", new List<string> { "sword", "shield" } },
-            {"armour", new List<string> { "cloth trousers", "cloth shirt" } },
-            {"consumables", new List<string> { "health potion" } },
-            {"misc", new List<string> { "rusted key" } }
-        };
+        private List<ParentWeapon> _InvWeapons = new List<ParentWeapon>();
+        private List<ParentArmour> _InvArmour = new List<ParentArmour>();
+        private List<ParentConsumable> _InvComsumables = new List<ParentConsumable>(); 
 
         public Player(string name, int maxHealth) 
         {
@@ -19,30 +16,72 @@ namespace DungeonExplorer
             MaxHealth = maxHealth;
             Health = MaxHealth;
 
-            // TEMPORARY
+            // TEMPORARY VALUES
             CurrentAtkDmg = 11;
             CurrentDefence = 5;
         }
-        public void PickUpItem(string item)
+        public void PickUpItem(ParentItem item)
+        // takes an item as input, casts it to the relevant child class, and adds
+        // it to the relevant inventory list
         {
-            
+            try
+            {
+                switch (item.Category)
+                {
+                    case "Weapon":
+                        ParentWeapon wepItem = (ParentWeapon)item;
+                        _InvWeapons.Add(wepItem);
+                        break;
+                    case "Armour":
+                        ParentArmour armItem = (ParentArmour)item;
+                        _InvArmour.Add(armItem);
+                        break;
+                    case "Consumable":
+                        ParentConsumable conItem = (ParentConsumable)item;
+                        _InvComsumables.Add(conItem);
+                        break;
+                    default:
+                        Console.WriteLine($"WARNING! unexpected error occured when trying to add " +
+                            $"{item.Name} to inventory. Its category field had an invalid value.");
+                        break;
+                }
+            }
+            catch (InvalidCastException)
+            {
+                Console.WriteLine($"WARNING! unexpected error occured when adding {item.Name} " +
+                    $"to inventory. its category field does not match its type");
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"WARNING! unexpected error when adding {item.Name} " +
+                    $"to inventory. exception: {e}\n{e.Message}");
+            }
         }
         public void DisplayInventoryContents()
         // prints the whole contents of the players inventoy to the console
         // items are displayed in chunks with headers depenting opn what sort of item they are
         // weapon, armour, etc...
-        // the _inventory variable is a dictionary where the keys are the item categories and
-        // the values are a list of all the items in that category that the player currently has
         {
-            foreach (var category in _inventory)
+            int counter = 1;
+            Console.WriteLine("WEAPONS");
+            foreach (var weapon in _InvWeapons)
             {
-                Console.WriteLine(category.Key.ToUpper() + ":");
-                int counter = 1;
-                foreach (var item in category.Value)
-                {
-                    Console.WriteLine($"{counter}. {item}");
-                    counter++;
-                }
+                Console.WriteLine($"{counter}. {weapon.Name}");
+                counter++;
+            }
+            counter = 1;
+            Console.WriteLine("ARMOUR");
+            foreach (var armour in _InvArmour)
+            {
+                Console.WriteLine($"{counter}. {armour.Name}");
+                counter++;
+            }
+            counter = 1;
+            Console.WriteLine("CONSUMABLES");
+            foreach (var consumable in _InvComsumables)
+            {
+                Console.WriteLine($"{counter}. {consumable.Name}");
+                counter++;
             }
         }
     }

@@ -36,5 +36,13 @@ namespace DungeonExplorer
         {
             level.ChanceCurrentRoom(new DefaultRoom(difficulty));
         }
+
+        public static void SetupTestInventory(Player player)
+        {
+            player.PickUpItem(new TesterSword());
+            player.PickUpItem(new TesterHelm());
+            player.PickUpItem(new TesterPotion());
+            player.PickUpItem(new TesterPotion());
+        }
     }
 }

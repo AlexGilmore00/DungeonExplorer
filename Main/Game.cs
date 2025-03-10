@@ -25,9 +25,15 @@ namespace DungeonExplorer
                 {
                     Console.WriteLine("please enter a name containing 16 characters or less");
                 }
+                else if (string.IsNullOrWhiteSpace(name))
+                {
+                    Console.WriteLine("please make sure your name contains at least one non-space character");
+                }
                 else { break; }
             }
             _player = new Player(name, 100);
+            Test.SetupTestInventory(_player);
+            _player.DisplayInventoryContents();
         }
         public void Start()
         {
@@ -167,7 +173,7 @@ namespace DungeonExplorer
                     }
                     else
                     {
-                        Console.WriteLine("unkmown command");
+                        Console.WriteLine("unkmown command...");
                     }
                 }
             }

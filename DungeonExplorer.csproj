@@ -43,23 +43,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="entities\Enemies\TestEnemy.cs" />
+    <Compile Include="Entities\Enemies\TestEnemy.cs" />
     <Compile Include="Main\Game.cs" />
-    <Compile Include="entities\LivingEntity.cs" />
-    <Compile Include="entities\Player.cs" />
+    <Compile Include="Entities\LivingEntity.cs" />
+    <Compile Include="Entities\Player.cs" />
     <Compile Include="Main\LookUp.cs" />
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\Test.cs" />
     <Compile Include="Map\Containers\ParentContainer.cs" />
     <Compile Include="Map\Containers\TestContainer.cs" />
-    <Compile Include="entities\Enemies\ParentEnemy.cs" />
+    <Compile Include="Entities\Enemies\ParentEnemy.cs" />
     <Compile Include="Map\Level.cs" />
     <Compile Include="Map\Rooms\ParentRoom.cs" />
+    <Compile Include="Items\ParentItem.cs" />
+    <Compile Include="Items\Consumables\ParentConsumable.cs" />
+    <Compile Include="Items\Equipables\ParentEquipable.cs" />
+    <Compile Include="Items\Equipables\Weapons\ParentWeapon.cs" />
+    <Compile Include="Items\Equipables\Armour\ParentArmour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Map\Rooms\DefaultRoom.cs" />
+    <Compile Include="Items\Equipables\Weapons\TesterSword.cs" />
+    <Compile Include="Items\Equipables\Armour\TesterHelm.cs" />
+    <Compile Include="Items\Consumables\TesterPotion.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
