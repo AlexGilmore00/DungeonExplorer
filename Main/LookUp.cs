@@ -56,5 +56,39 @@ namespace DungeonExplorer
 
             return descriptions[difficulty][rnd.Next(0, descriptions[difficulty].Count)];
         }
+
+        //
+        //
+        // for loot generation
+        //
+        //
+
+        public static ParentItem GenerateRandomItem(int lootTable)
+        // returns a random item of type ParentItem from a pool of items determined by the lootTable arg
+        {
+            switch (lootTable)
+            {
+                // test container loot table
+                case -1:
+                    int itemNum = rnd.Next(0, 3);  //!remember to update random number bounds when adding new items!
+
+                    switch (itemNum)
+                    {
+                        case 0:
+                            return new TesterHelm();
+                        case 1:
+                            return new TesterSword();
+                        case 2:
+                            return new TesterPotion();
+                        default:
+                            Console.WriteLine("WARNING!! random range too large for test container loot table.");
+                            return null;
+                    }
+                default:
+                    Console.WriteLine("WARNING!! invalid loot table input has been given when" +
+                        " calling LookUp.GetRandomItem()");
+                    return null;
+            }
+        }
     }
 }

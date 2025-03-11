@@ -23,23 +23,5 @@ namespace DungeonExplorer
             // describes the general look and feel of the room
             _flavourText = LookUp.GetRandomFlavourText(_difficulty);
         }
-
-        private void PopulateEnemies()
-        // fill the rooms Enemies param with random enemy classes
-        {
-            for (int i = 0; i < Enemies.Length; i++)
-            {
-                Enemies[i] = LookUp.GenerateRandomEnemy();
-            }
-        }
-
-        private void PopulateContainers()
-        // fill the rooms Containers param with random containers
-        {
-            for (int i = 0;i < Containers.Length; i++)
-            {
-                Containers[i] = LookUp.GenerateRandomContainer();
-            }
-        }
     }
 }

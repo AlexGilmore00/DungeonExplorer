@@ -11,7 +11,10 @@ namespace DungeonExplorer
     {
         public TestContainer()
         {
-            Name = "this is a test container. there is nothing inside";
+            Name = "Test Conatainer";
+            // set up the number of items in the container
+            Items = new ParentItem[Rnd.Next(1, 4)];
+            PopulateItems(-1);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace DungeonExplorer
             CurrentRoom = new DefaultRoom(_difficulty);
         }
 
-        public void ChanceCurrentRoom(ParentRoom newRoom)
+        public void ChangeCurrentRoom(ParentRoom newRoom)
         // changes the current room to the new room
         {
             CurrentRoom = newRoom;

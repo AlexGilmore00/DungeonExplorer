@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace DungeonExplorer
 
         public static void GenerateNewRoom(Level level, int difficulty)
         {
-            level.ChanceCurrentRoom(new DefaultRoom(difficulty));
+            level.ChangeCurrentRoom(new DefaultRoom(difficulty));
         }
 
         public static void SetupTestInventory(Player player)
@@ -43,6 +44,30 @@ namespace DungeonExplorer
             player.PickUpItem(new TesterHelm());
             player.PickUpItem(new TesterPotion());
             player.PickUpItem(new TesterPotion());
+        }
+
+        public static void TestItemGenerationAndContainers()
+        {
+            List<ParentItem> itemList = new List<ParentItem>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                ParentItem newItem = LookUp.GenerateRandomItem(-1);
+                Debug.Assert(newItem != null, "WARNING!! some error has occured when trying to get a random item");
+                itemList.Add(LookUp.GenerateRandomItem(-1));
+            }
+            Console.WriteLine("random item generation test complete");
+
+            Console.WriteLine("now testing container item generation");
+            ParentContainer container = new TestContainer();
+
+            Debug.Assert(container.Items.Length != 0, "WARNING!! container items not populated correctly");
+            Console.WriteLine($"container should contain {container.Items.Length} items...");
+            foreach (ParentItem item in container.Items)
+            {
+                Debug.Assert(item != null, "WARNING!! some error has occured when trying to get a random item");
+                Console.WriteLine(item.Name);
+            }
         }
     }
 }

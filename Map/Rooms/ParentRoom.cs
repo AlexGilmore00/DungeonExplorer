@@ -41,5 +41,22 @@ namespace DungeonExplorer
             }
             Console.WriteLine();
         }
+        protected void PopulateEnemies()
+        // fill the rooms Enemies param with random enemy classes
+        {
+            for (int i = 0; i < Enemies.Length; i++)
+            {
+                Enemies[i] = LookUp.GenerateRandomEnemy();
+            }
+        }
+
+        protected void PopulateContainers()
+        // fill the rooms Containers param with random containers
+        {
+            for (int i = 0; i < Containers.Length; i++)
+            {
+                Containers[i] = LookUp.GenerateRandomContainer();
+            }
+        }
     }
 }

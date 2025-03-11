@@ -32,8 +32,6 @@ namespace DungeonExplorer
                 else { break; }
             }
             _player = new Player(name, 100);
-            Test.SetupTestInventory(_player);
-            _player.DisplayInventoryContents();
         }
         public void Start()
         {
@@ -83,6 +81,14 @@ namespace DungeonExplorer
                 {
                     Console.WriteLine("[-] there are no enemies to fight");
                 }
+                if (_currentRoom.Containers.Length > 0)
+                {
+                    Console.WriteLine("[3] loot a container");
+                }
+                else
+                {
+                    Console.WriteLine("[-] there are no containers to loot");
+                }
 
                 //get user numeric input
                 ConsoleKeyInfo input = Console.ReadKey(true);
@@ -100,10 +106,18 @@ namespace DungeonExplorer
                         if (_currentRoom.Enemies.Length > 0)
                         {
                             ChooseEnemyToFight();
-                            // exit the subroutine of the player dies during the fight
+                            // exit the subroutine if the player dies during the fight
                             if (_player.IsDead) { return; }
                         }
                         break;
+                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
+                        Console.WriteLine();
+                        if (_currentRoom.Containers.Length > 0)
+                        {
+                            ChooseContainer();
+                        }
+                    break;
                     // !!FOR TESTING ONLY!!
                     // !!REMOVE AFTER USE!!
                     case ConsoleKey.G:
@@ -222,9 +236,14 @@ namespace DungeonExplorer
         private void BeginEnemyBattleTurn(Player player, ParentEnemy enemy)
         // not fully implemented but works while the enemies are still simple
         // once complete this should also allow enemies to choose a random move
-        // from thei aresenal
+        // from their aresenal
         {
             enemy.DealDamageTo(player, enemy, false);
+        }
+
+        private void ChooseContainer()
+        {
+            Console.WriteLine("not implemented yet");
         }
     }
 }
