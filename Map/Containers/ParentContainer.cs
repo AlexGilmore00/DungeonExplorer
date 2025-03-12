@@ -13,15 +13,15 @@ namespace DungeonExplorer
     {
         public static Random Rnd = new Random();
         public string Name { get; protected set; }
-        public ParentItem[] Items { get; protected set; }
+        public List<ParentItem> Items { get; protected set; }
 
         public ParentContainer() { }
 
-        protected void PopulateItems(int itemPool)
+        protected void PopulateItems(int number, int itemPool)
         {
-            for (int i = 0; i < Items.Length; i++)
+            for (int i = 0; i < number; i++)
             {
-                Items[i] = LookUp.GenerateRandomItem(itemPool);
+                Items.Add(LookUp.GenerateRandomItem(itemPool));
             }
         }
     }

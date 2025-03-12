@@ -61,8 +61,8 @@ namespace DungeonExplorer
             Console.WriteLine("now testing container item generation");
             ParentContainer container = new TestContainer();
 
-            Debug.Assert(container.Items.Length != 0, "WARNING!! container items not populated correctly");
-            Console.WriteLine($"container should contain {container.Items.Length} items...");
+            Debug.Assert(container.Items.Count != 0, "WARNING!! container items not populated correctly");
+            Console.WriteLine($"container should contain {container.Items.Count} items...");
             foreach (ParentItem item in container.Items)
             {
                 Debug.Assert(item != null, "WARNING!! some error has occured when trying to get a random item");

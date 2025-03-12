@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Media;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace DungeonExplorer
 {
@@ -89,6 +91,7 @@ namespace DungeonExplorer
                 {
                     Console.WriteLine("[-] there are no containers to loot");
                 }
+                Console.WriteLine("[4] display inventory");
 
                 //get user numeric input
                 ConsoleKeyInfo input = Console.ReadKey(true);
@@ -118,6 +121,10 @@ namespace DungeonExplorer
                             ChooseContainer();
                         }
                     break;
+                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
+                        _player.DisplayInventoryContents();
+                        break;
                     // !!FOR TESTING ONLY!!
                     // !!REMOVE AFTER USE!!
                     case ConsoleKey.G:
@@ -242,8 +249,96 @@ namespace DungeonExplorer
         }
 
         private void ChooseContainer()
+        // gives the player a list of containers in the room and prompts them to
+        // check one of them then calls to check that container
+        // rooms can't have more than 9 containers
         {
-            Console.WriteLine("not implemented yet");
+            bool endSubroutine = false;
+            while (!endSubroutine)
+            {
+                // keep track of valid inputs since number of containers can change
+                HashSet<int> validInputs = new HashSet<int>();
+                // display the list of containers in the room
+                Console.WriteLine("which contianer would you like to loot?");
+                int counter = 1;
+                foreach (ParentContainer container in _currentRoom.Containers)
+                {
+                    Console.WriteLine($"[{counter}] {container.Name}");
+                    validInputs.Add(counter);
+                    counter++;
+                }
+                Console.WriteLine("[r] return to previous menu\n");
+
+                // get user input
+                ConsoleKeyInfo input = Console.ReadKey(true);
+                // check if the user input is a number
+                if (char.IsDigit(input.KeyChar))
+                {
+                    int numInput = int.Parse(input.KeyChar.ToString());
+                    // check if the inputted number is a valid input
+                    if (validInputs.Contains(numInput))
+                    {
+                        // chack if the container is empty
+                        if (_currentRoom.Containers[numInput - 1].Items.Count == 0)
+                        {
+                            Console.WriteLine("this container is empty\n");
+                            continue;
+                        }
+                        CheckContainer(_currentRoom.Containers[numInput - 1]);
+                    }
+                    else
+                    {
+                        Console.WriteLine("unknown command...");
+                    }
+                }
+                else
+                // if its not a number, check if its the return character [r]
+                {
+                    char chinput = input.KeyChar;
+                    if (char.ToLower(chinput) == char.Parse("r"))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Console.WriteLine("unknown command...");
+                    }
+                }
+            }
+        }
+
+        private void CheckContainer(ParentContainer container)
+        // print what items the container contains and give the player the option
+        // to take them
+        {
+            Console.WriteLine($"this {container.Name} contains:");
+            foreach (ParentItem item in container.Items)
+            {
+                Console.WriteLine(item.Name);
+            }
+            Console.WriteLine();
+
+            Console.WriteLine("what would you like to do?\n" +
+                "[1] take all items\n" +
+                "[r] return to the previous menu\n");
+            // get user inpur
+            ConsoleKeyInfo input = Console.ReadKey(true);
+            switch (input.Key)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    foreach (ParentItem item in container.Items)
+                    {
+                        _player.PickUpItem(item);
+                    }
+                    container.Items.Clear();
+                    break;
+                case ConsoleKey.R:
+                    return;
+                default:
+                    Console.WriteLine("unknown command...");
+                    break;
+            }
         }
     }
 }

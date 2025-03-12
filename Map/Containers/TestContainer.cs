@@ -13,8 +13,8 @@ namespace DungeonExplorer
         {
             Name = "Test Conatainer";
             // set up the number of items in the container
-            Items = new ParentItem[Rnd.Next(1, 4)];
-            PopulateItems(-1);
+            Items = new List<ParentItem>();
+            PopulateItems(Rnd.Next(1, 4), - 1);
         }
     }
 }
