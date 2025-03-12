@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    public class ParentEquipable : ParentItem
+    public abstract class ParentEquipable : ParentItem
     {
         // which slot the item should be equiped in...
         // "Head", "Chest", "Legs", "Feet", "Rhand", "Lhand"

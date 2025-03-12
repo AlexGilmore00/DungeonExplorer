@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    public class ParentItem
+    public abstract class ParentItem
     {
         public string Name { get; protected set; }
         // stores what category the item is a part of...

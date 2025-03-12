@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    public class ParentWeapon : ParentEquipable
+    public abstract class ParentWeapon : ParentEquipable
     {
     }
 }

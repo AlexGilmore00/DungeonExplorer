@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    public class ParentRoom
+    public abstract class ParentRoom
     // a class for all room types to inherit from
     // all public functions and fields of an room should be implemented in here
     {

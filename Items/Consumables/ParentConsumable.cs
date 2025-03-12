@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    public class ParentConsumable : ParentItem
+    public abstract class ParentConsumable : ParentItem
     {
         public bool IsUseableInBattle { get; protected set; }
         public bool IsUseableOnPlayer { get; protected set; }
