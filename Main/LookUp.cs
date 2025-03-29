@@ -54,6 +54,18 @@ namespace DungeonExplorer
                 "distant halls."
             });
 
+            // level two
+            descriptions.Add(new List<string>
+            {
+                "placeholder lvl 2"
+            });
+
+            // level three
+            descriptions.Add(new List<string>
+            {
+                "placeholder lvl 3"
+            });
+
             return descriptions[difficulty][rnd.Next(0, descriptions[difficulty].Count)];
         }
 

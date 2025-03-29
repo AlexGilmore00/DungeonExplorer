@@ -69,5 +69,44 @@ namespace DungeonExplorer
                 Console.WriteLine(item.Name);
             }
         }
+
+        public static void TestLevelGeneration()
+        {
+            for (int difficulty = 0; difficulty < 3; difficulty++)
+            {
+                for (int k = 1; k <= 10; k++)
+                {
+                    Console.WriteLine($"GENERATING level num {k} at difficulty {difficulty}");
+                    Level level = new Level(difficulty);
+                    ParentRoom[,] levelLayout = level.GetLevelLayout();
+
+                    // display level layout as well as number of rooms
+                    for (int i = 0; i < levelLayout.GetLength(0); i++)
+                    {
+                        Console.Write($"{i}    ");
+                        for (int j = 0; j < levelLayout.GetLength(0); j++)
+                        {
+                            string room;
+                            if (levelLayout[i, j] != null)
+                                room = "Room";
+                            else
+                                room = "Null";
+                            Console.Write($"{room} ");
+                        }
+                        Console.WriteLine();
+                    }
+
+                    Console.Write("     ");
+                    for (int i = 0; i < levelLayout.GetLength(0); i++)
+                    {
+                        Console.Write($"{i}    ");
+                    }
+
+                    int[] roomInfo = level.GetRoomCountInfo();
+                    Console.WriteLine($"\nroom count = {roomInfo[0]}\n" +
+                        $"excess rooms = {roomInfo[1]}");
+                }
+            }
+        }
     }
 }

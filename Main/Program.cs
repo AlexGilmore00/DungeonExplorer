@@ -10,15 +10,15 @@ namespace DungeonExplorer
     {
         static void Main(string[] args)
         {
-            Test.TestItemGenerationAndContainers();
+            Test.TestLevelGeneration();
             try
             {
                 Game game = new Game();
                 game.Start();
             }
-            catch
+            catch (Exception e)
             {
-                Console.WriteLine("AN UNEXPECTED ERROR HAS OCCURED");
+                Console.WriteLine($"AN UNEXPECTED ERROR HAS OCCURED: {e}, {e.Message}");
             }
             finally
             {
