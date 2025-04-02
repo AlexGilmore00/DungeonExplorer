@@ -88,10 +88,10 @@ namespace DungeonExplorer
                         {
                             string room;
                             if (levelLayout[i, j] != null)
-                                room = "Room";
+                                room = "[   ]";
                             else
-                                room = "Null";
-                            Console.Write($"{room} ");
+                                room = "Null ";
+                            Console.Write($"{room}");
                         }
                         Console.WriteLine();
                     }

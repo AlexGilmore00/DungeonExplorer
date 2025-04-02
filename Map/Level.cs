@@ -37,7 +37,7 @@ namespace DungeonExplorer
             AddRooms(xCoord, yCoord, desiredRoomCount);
 
             // set the starting room to the root room
-            CurrentRoom = _levelLayout[xCoord, yCoord];
+            CurrentRoom = _levelLayout[yCoord, xCoord];
         }
 
         private void AddRooms(int xCoord, int yCoord, int desBranchLength)
@@ -55,21 +55,21 @@ namespace DungeonExplorer
 
             // add room
             _roomCount++;
-            _levelLayout[xCoord, yCoord] = new DefaultRoom(_difficulty);
+            _levelLayout[yCoord, xCoord] = new DefaultRoom(_difficulty);
 
             // check valid spots for branches
             HashSet<int> validSpots = new HashSet<int>();  /* contains numbers corresponding to which spots are available
                                                             * 0 = south, 1 = west, 2 = north, 3 = east
-                                                            * these correspond to indexes in a future array
+                                                            * these correspond to indexes in the future 'branches' array
                                                             */
             if (yCoord - 1 >= 0)
-                if (_levelLayout[xCoord, yCoord - 1] == null) { validSpots.Add(0); }
+                if (_levelLayout[yCoord - 1, xCoord] == null) { validSpots.Add(0); }
             if (xCoord - 1 >= 0)
-                if (_levelLayout[xCoord - 1, yCoord] == null) { validSpots.Add(1); }
+                if (_levelLayout[yCoord, xCoord - 1] == null) { validSpots.Add(1); }
             if (yCoord + 1 < _levelLayout.GetLength(0))
-                if (_levelLayout[xCoord, yCoord + 1] == null) { validSpots.Add(2); }
+                if (_levelLayout[yCoord + 1, xCoord] == null) { validSpots.Add(2); }
             if (xCoord + 1 < _levelLayout.GetLength(0))
-                if (_levelLayout[xCoord + 1, yCoord] == null) { validSpots.Add(3); }
+                if (_levelLayout[yCoord, xCoord + 1] == null) { validSpots.Add(3); }
 
             int desBranchCount;
             // determine how many branches to create from this room
@@ -98,6 +98,10 @@ namespace DungeonExplorer
                 validSpots.Remove(direction);  // remove that direction for further itterations
             }
 
+            // find the number of rooms that will be erroniously lost because of integer
+            // diviosion when recursively calling the function
+            int lostRooms = desBranchLength % actualBranchCount;
+
             // add the rooms in the recursive case
             for (int i = 0; i < 4; i++)
             {
@@ -107,8 +111,13 @@ namespace DungeonExplorer
                     // operations to get the relevant x/y change for the desired direction
                     int xChange = (i % 2) * (-2 + i);
                     int yChange = ((i + 1) % 2) * (-1 + i);
+                    // distribute lost rooms - has a bias towards directions with a lower index
+                    int extraRoom = 0;
+                    if (lostRooms > 0)
+                        extraRoom = 1;
+                    lostRooms--;
                     // start the next branch
-                    AddRooms(xCoord + xChange, yCoord + yChange, desBranchLength / actualBranchCount);
+                    AddRooms(xCoord + xChange, yCoord + yChange, (desBranchLength / actualBranchCount) + extraRoom);
                 }
             }
         }
