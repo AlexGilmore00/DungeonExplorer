@@ -25,7 +25,8 @@ namespace DungeonExplorer
         }
 
         private void GenerateLevelLayout()
-        // ??maybe use tree data structure when making the map??
+        // sets up information before calling the reccursive add rooms function
+        // if addRooms has some branches that are terminated early, will also fill in the excess rooms
         {
             int desiredRoomCount = 8 + _difficulty * 4;
             // get coords of the centre of the level to add the root room
@@ -35,6 +36,10 @@ namespace DungeonExplorer
             // !!ADD FUNCTIONALITY FOR ADDING EXCESS ROOMS;
             // IF ACTUAL ROOM COUNT IS LESS THAN DESIRED ROOM COUNT, ADD EXCESS TO EXCESS ROOM!!
             AddRooms(xCoord, yCoord, desiredRoomCount);
+            if (_excessRooms > 0)
+            {
+                FillInExcessRooms();
+            }
 
             // set the starting room to the root room
             CurrentRoom = _levelLayout[yCoord, xCoord];
@@ -119,6 +124,59 @@ namespace DungeonExplorer
                     // start the next branch
                     AddRooms(xCoord + xChange, yCoord + yChange, (desBranchLength / actualBranchCount) + extraRoom);
                 }
+            }
+        }
+
+        private void FillInExcessRooms()
+        // find all valid room spots and add in rooms there
+        // if excess rooms is still not 0 after the first call, call the function again
+        {
+            // find all the valid rooms
+            int levelSize = _levelLayout.GetLength(0);
+            // stores all the valid spots found, tuple is in format (x-coordinate, y-coordinate)
+            List<Tuple<int, int>> validSpots = new List<Tuple<int, int>>();
+            for (int x = 0; x <  levelSize; x++)
+            {
+                for (int y = 0; y < levelSize; y++)
+                {
+                    // check if the current room is empty
+                    if (_levelLayout[y, x] == null)
+                    {
+                        bool isValid = false;
+                        // check if it has at least one connecting room
+                        if (y - 1 > 0)
+                            if (_levelLayout[y - 1, x] != null) { isValid = true; }
+                        if (x - 1 > 0)
+                            if (_levelLayout[y, x - 1] != null) { isValid = true; }
+                        if (y + 1 < levelSize - 1)
+                            if (_levelLayout[y + 1, x] != null) { isValid = true; }
+                        if (x + 1 < levelSize - 1)
+                            if (_levelLayout[y, x + 1] != null) { isValid = true; }
+
+                        if (isValid)
+                        {
+                            validSpots.Add(Tuple.Create(x, y));
+                        }
+                    }
+                }
+            }
+
+            // randomly add rooms to these valid coordinates
+            while (_excessRooms > 0 && validSpots.Count() > 0)
+            {
+                // get a random valid spot
+                Tuple<int, int> coords = validSpots[_rnd.Next(validSpots.Count())];
+                validSpots.Remove(coords);
+                // add the room
+                _levelLayout[coords.Item2, coords.Item1] = new DefaultRoom(_difficulty);
+                _roomCount++;
+                _excessRooms--;
+            }
+
+            // if all excess rooms are still not added, call the function again
+            if (_excessRooms > 0)
+            {
+                FillInExcessRooms();
             }
         }
 
