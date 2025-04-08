@@ -12,8 +12,16 @@ namespace DungeonExplorer
     {
         public ParentEnemy[] Enemies { get; protected set; }
         public ParentContainer[] Containers { get; protected set; }
+        public HashSet<char> Connections { get; protected set; }
 
         protected string _flavourText;
+        protected HashSet<char> _validConnections;
+
+        public ParentRoom()
+        {
+            Connections = new HashSet<char>();
+            _validConnections = new HashSet<char> { 'N', 'E', 'S', 'W' };
+        }
 
         public void DisplayDescription()
         // print the flavour text of the current room as well as and information reguarding
@@ -21,6 +29,28 @@ namespace DungeonExplorer
         // should eventually also print connections to other rooms once levels are properly implemented
         {
             Console.WriteLine(_flavourText);
+
+            // display directions of connecting rooms
+            Console.WriteLine("this room contains connections to:");
+            foreach (char c in Connections)
+            {
+                switch (c)
+                {
+                    case 'N':
+                        Console.WriteLine("N - a room to the North");
+                        break;
+                    case 'E':
+                        Console.WriteLine("E - a room to the East");
+                        break;
+                    case 'S':
+                        Console.WriteLine("S - a room to the Sorth");
+                        break;
+                    case 'W':
+                        Console.WriteLine("W - a room to the West");
+                        break;
+                }
+            }
+
             //display enemy list if necesary
             if (Enemies.Length > 0)
             {
@@ -56,6 +86,21 @@ namespace DungeonExplorer
             for (int i = 0; i < Containers.Length; i++)
             {
                 Containers[i] = LookUp.GenerateRandomContainer();
+            }
+        }
+
+        public void AddConnection(char connection)
+        // add a room connection
+        {
+            if (!_validConnections.Contains(connection))
+            {
+                Console.WriteLine("WARNING!! an invalid character has been given when adding a " +
+                    "connection the a room. no default connection has been added meaning this room" +
+                    "may be missing a connection");
+            }
+            else
+            {
+                Connections.Add(connection);
             }
         }
     }

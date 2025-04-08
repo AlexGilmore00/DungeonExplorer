@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,16 +32,18 @@ namespace DungeonExplorer
         {
             int desiredRoomCount = 8 + _difficulty * 4;
             // get coords of the centre of the level to add the root room
-            int xCoord = _levelLayout.GetLength(0) / 2;  // ??maybe switch to struct for storing x,y co-ords??
+            int xCoord = _levelLayout.GetLength(0) / 2;
             int yCoord = _levelLayout.GetLength(0) / 2;
 
-            // !!ADD FUNCTIONALITY FOR ADDING EXCESS ROOMS;
-            // IF ACTUAL ROOM COUNT IS LESS THAN DESIRED ROOM COUNT, ADD EXCESS TO EXCESS ROOM!!
+            // add the rooms
             AddRooms(xCoord, yCoord, desiredRoomCount);
             if (_excessRooms > 0)
             {
                 FillInExcessRooms();
             }
+
+            // add the flags for room connection directions in each rooms
+            SetUpRoomConnections();
 
             // set the starting room to the root room
             CurrentRoom = _levelLayout[yCoord, xCoord];
@@ -139,24 +143,24 @@ namespace DungeonExplorer
             {
                 for (int y = 0; y < levelSize; y++)
                 {
-                    // check if the current room is empty
-                    if (_levelLayout[y, x] == null)
-                    {
-                        bool isValid = false;
-                        // check if it has at least one connecting room
-                        if (y - 1 > 0)
-                            if (_levelLayout[y - 1, x] != null) { isValid = true; }
-                        if (x - 1 > 0)
-                            if (_levelLayout[y, x - 1] != null) { isValid = true; }
-                        if (y + 1 < levelSize - 1)
-                            if (_levelLayout[y + 1, x] != null) { isValid = true; }
-                        if (x + 1 < levelSize - 1)
-                            if (_levelLayout[y, x + 1] != null) { isValid = true; }
+                    // check if location is alrady occupied by a room
+                    if (_levelLayout[y, x] != null)
+                        continue;
 
-                        if (isValid)
-                        {
-                            validSpots.Add(Tuple.Create(x, y));
-                        }
+                    bool isValid = false;
+                    // check if it has at least one connecting room
+                    if (y - 1 > 0)
+                        if (_levelLayout[y - 1, x] != null) { isValid = true; }
+                    if (x - 1 > 0)
+                        if (_levelLayout[y, x - 1] != null) { isValid = true; }
+                    if (y + 1 < levelSize - 1)
+                        if (_levelLayout[y + 1, x] != null) { isValid = true; }
+                    if (x + 1 < levelSize - 1)
+                        if (_levelLayout[y, x + 1] != null) { isValid = true; }
+
+                    if (isValid)
+                    {
+                        validSpots.Add(Tuple.Create(x, y));
                     }
                 }
             }
@@ -180,6 +184,66 @@ namespace DungeonExplorer
             }
         }
 
+        private void SetUpRoomConnections()
+        // go through each room in _levelLayout and add all the valid connecting
+        // directions to each room
+        {
+            int levelSize = _levelLayout.GetLength(0);
+            // check each room
+            for (int y = 0; y < levelSize; y++)
+            {
+                for (int x = 0; x < levelSize; x++)
+                {
+                    // check if no room is there
+                    if (_levelLayout[y, x] == null)
+                        continue;
+
+                    if (y - 1 > 0)
+                        if (_levelLayout[y - 1, x] != null)
+                            _levelLayout[y, x].AddConnection('N');
+                    if (x + 1 < levelSize)
+                        if (_levelLayout[y, x + 1] != null)
+                            _levelLayout[y, x].AddConnection('E');
+                    if (y + 1 < levelSize)
+                        if (_levelLayout[y + 1, x] != null)
+                            _levelLayout[y, x].AddConnection('S');
+                    if (x - 1 > 0)
+                        if (_levelLayout[y, x - 1] != null)
+                            _levelLayout[y, x].AddConnection('W');
+                }
+            }
+        }
+
+        public void ChangeCurrentRoom(int x, int y)
+        // changes the current room to a new room based on the relative change
+        // in coords given relative to the current room
+        {
+            Tuple<int, int> currentRoomCoords = GetCurrentRoomCoords();
+            CurrentRoom = _levelLayout[currentRoomCoords.Item2 + y, currentRoomCoords.Item1 + x];
+        }
+
+        private Tuple<int, int> GetCurrentRoomCoords()
+        // returns the coords of the current room in the form of a tuple in form (x, y)
+        {
+            int levelSize = _levelLayout.GetLength(0);
+            // find the room
+            for (int x = 0; x < levelSize; x++)
+            {
+                for (int y = 0;  y < levelSize; y++)
+                {
+                    if (_levelLayout[y, x] == CurrentRoom)
+                    {
+                        return Tuple.Create(x, y);
+                    }
+                }
+            }
+
+            // if the room is somehow not found, default to root room
+            Console.WriteLine("WARNING!! the current room was not found when searching in" +
+                "_levelLayout. default coords corresponding to the root room were returned.");
+            return Tuple.Create(levelSize / 2, levelSize / 2);
+        }
+
         public ParentRoom[,] GetLevelLayout()
         {
             return _levelLayout;
@@ -188,12 +252,6 @@ namespace DungeonExplorer
         public int[] GetRoomCountInfo()
         {
             return new int[] { _roomCount, _excessRooms };
-        }
-
-        public void ChangeCurrentRoom(ParentRoom newRoom)
-        // changes the current room to the new room
-        {
-            CurrentRoom = newRoom;
         }
     }
 }

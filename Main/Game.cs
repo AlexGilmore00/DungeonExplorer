@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Media;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -13,6 +14,7 @@ namespace DungeonExplorer
     {
         private Player _player;
         private ParentRoom _currentRoom;
+        private Level _currentLevel;
         private bool _levelComplete;
 
         public Game()
@@ -34,6 +36,7 @@ namespace DungeonExplorer
                 else { break; }
             }
             _player = new Player(name, 100);
+            Console.WriteLine();
         }
         public void Start()
         {
@@ -45,6 +48,7 @@ namespace DungeonExplorer
                 for (int level = 0; level < levelCount; level++)
                 {
                     Level currentLevel = new Level(level);
+                    _currentLevel = currentLevel;
                     while (!_levelComplete)
                     {
                         // load new room
@@ -91,7 +95,8 @@ namespace DungeonExplorer
                 {
                     Console.WriteLine("[-] there are no containers to loot");
                 }
-                Console.WriteLine("[4] display inventory");
+                Console.WriteLine("[4] move rooms");
+                Console.WriteLine("[5] display inventory");
 
                 //get user numeric input
                 ConsoleKeyInfo input = Console.ReadKey(true);
@@ -123,13 +128,16 @@ namespace DungeonExplorer
                     break;
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
+                        Console.WriteLine();
+                        if (MoveRoom() == true)
+                        {
+                            return;
+                        }
+                        break;
+                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
                         _player.DisplayInventoryContents();
                         break;
-                    // !!FOR TESTING ONLY!!
-                    // !!REMOVE AFTER USE!!
-                    case ConsoleKey.G:
-                        Test.GenerateNewRoom(currentLevel, 0);
-                        return;
                     default:
                         Console.WriteLine("unknown command...");
                         break;
@@ -338,6 +346,100 @@ namespace DungeonExplorer
                 default:
                     Console.WriteLine("unknown command...");
                     break;
+            }
+        }
+
+        private bool MoveRoom()
+        // displays which valid directions the player can move from this room and
+        // asks them to choose which one to move to. if they confirm that they do
+        // want to move, return true, if not, false.
+        {
+            while (true)
+            {
+                Test.ShowCurrentLevelLayout(_currentLevel, currentRoom: _currentRoom);
+                // keep track of what player inputs should be valid
+                HashSet<int> validInputs = new HashSet<int>();
+                // keeps track pf which valid input corresponds to which direction
+                // tuple is coords of direction relative to current room in form (x, -y)
+                Dictionary<int, Tuple<int, int>> inputToDirectionMap = new Dictionary<int, Tuple<int, int>>();
+
+                // display options to the player
+                Console.WriteLine("which direction would you like to move?");
+                // check which directions are valid for the current room
+                if (_currentRoom.Connections.Contains('N'))
+                {
+                    // add to valid inputs
+                    int num = AddToValidInputs(validInputs);
+                    inputToDirectionMap[num] = Tuple.Create(0, -1);
+                    Console.WriteLine($"[{num}] North");
+                }
+                if (_currentRoom.Connections.Contains('E'))
+                {
+                    // add to valid inputs
+                    int num = AddToValidInputs(validInputs);
+                    inputToDirectionMap[num] = Tuple.Create(1, 0);
+                    Console.WriteLine($"[{num}] East");
+                }
+                if (_currentRoom.Connections.Contains('S'))
+                {
+                    // add to valid inputs
+                    int num = AddToValidInputs(validInputs);
+                    inputToDirectionMap[num] = Tuple.Create(0, 1);
+                    Console.WriteLine($"[{num}] South");
+                }
+                if (_currentRoom.Connections.Contains('W'))
+                {
+                    // add to valid inputs
+                    int num = AddToValidInputs(validInputs);
+                    inputToDirectionMap[num] = Tuple.Create(-1, 0);
+                    Console.WriteLine($"[{num}] West");
+                }
+                Console.WriteLine("[r] return to the previous menu\n");
+
+                // get player input
+                ConsoleKeyInfo input = Console.ReadKey(true);
+
+                // check if the input if the return character
+                if (char.ToLower(input.KeyChar) == 'r')
+                {
+                    return false;
+                }
+                // make sure the input is a number
+                if (!char.IsDigit(input.KeyChar))
+                {
+                    Console.WriteLine("unknown command...");
+                    continue;
+                }
+                // make sure the input is a recognised as a valid input
+                int inputNum = int.Parse(input.KeyChar.ToString());
+                if (!validInputs.Contains(inputNum))
+                {
+                    Console.WriteLine("unknown command...");
+                    continue;
+                }
+                // if input is valid, move to the next room
+                _currentLevel.ChangeCurrentRoom(inputToDirectionMap[inputNum].Item1, inputToDirectionMap[inputNum].Item2);
+                return true;
+            }
+        }
+
+        private int AddToValidInputs(HashSet<int> validInputs)
+        // takes a hashset and adds its max value + 1 to it
+        // if it is empty, adds 1
+        // returns the number that was added
+        {
+            int num;
+            if (validInputs.Count != 0)
+            {
+                num = validInputs.Max() + 1;
+                validInputs.Add(num);
+                return num;
+            }
+            else
+            {
+                num = 1;
+                validInputs.Add(num);
+                return num;
             }
         }
     }

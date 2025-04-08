@@ -33,11 +33,6 @@ namespace DungeonExplorer
             room.DisplayDescription();
         }
 
-        public static void GenerateNewRoom(Level level, int difficulty)
-        {
-            level.ChangeCurrentRoom(new DefaultRoom(difficulty));
-        }
-
         public static void SetupTestInventory(Player player)
         {
             player.PickUpItem(new TesterSword());
@@ -78,34 +73,41 @@ namespace DungeonExplorer
                 {
                     Console.WriteLine($"GENERATING level num {k} at difficulty {difficulty}");
                     Level level = new Level(difficulty);
-                    ParentRoom[,] levelLayout = level.GetLevelLayout();
-
-                    // display level layout as well as number of rooms
-                    for (int i = 0; i < levelLayout.GetLength(0); i++)
-                    {
-                        Console.Write($"{i}    ");
-                        for (int j = 0; j < levelLayout.GetLength(0); j++)
-                        {
-                            string room;
-                            if (levelLayout[i, j] != null)
-                                room = "[   ]";
-                            else
-                                room = "Null ";
-                            Console.Write($"{room}");
-                        }
-                        Console.WriteLine();
-                    }
-
-                    Console.Write("     ");
-                    for (int i = 0; i < levelLayout.GetLength(0); i++)
-                    {
-                        Console.Write($"{i}    ");
-                    }
+                    ShowCurrentLevelLayout(level);
 
                     int[] roomInfo = level.GetRoomCountInfo();
                     Console.WriteLine($"\nroom count = {roomInfo[0]}\n" +
                         $"excess rooms = {roomInfo[1]}");
                 }
+            }
+        }
+
+        public static void ShowCurrentLevelLayout(Level level, ParentRoom currentRoom = null)
+        {
+            ParentRoom[,] levelLayout = level.GetLevelLayout();
+
+            // display level layout as well as number of rooms
+            for (int i = 0; i < levelLayout.GetLength(0); i++)
+            {
+                Console.Write($"{i}    ");
+                for (int j = 0; j < levelLayout.GetLength(0); j++)
+                {
+                    string room;
+                    if (currentRoom != null && levelLayout[i, j] == currentRoom)
+                        room = "[ x ]";
+                    else if (levelLayout[i, j] != null)
+                        room = "[   ]";
+                    else
+                        room = "Null ";
+                    Console.Write($"{room}");
+                }
+                Console.WriteLine();
+            }
+
+            Console.Write("     ");
+            for (int i = 0; i < levelLayout.GetLength(0); i++)
+            {
+                Console.Write($"{i}    ");
             }
         }
     }
