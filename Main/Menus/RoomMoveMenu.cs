@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,7 +17,7 @@ namespace DungeonExplorer
         {
             while (true)
             {
-                Test.ShowCurrentLevelLayout(currentLevel, currentRoom: currentRoom);
+                DisplayLevelLayout(currentLevel, currentRoom);
                 // keep track of what player inputs should be valid
                 HashSet<int> validInputs = new HashSet<int>();
                 // keeps track pf which valid input corresponds to which direction
@@ -24,7 +25,7 @@ namespace DungeonExplorer
                 Dictionary<int, Tuple<int, int>> inputToDirectionMap = new Dictionary<int, Tuple<int, int>>();
 
                 // display options to the player
-                Console.WriteLine("which direction would you like to move?");
+                Console.WriteLine("\nwhich direction would you like to move?");
                 // check which directions are valid for the current room
                 if (currentRoom.Connections.Contains('N'))
                 {
@@ -100,6 +101,39 @@ namespace DungeonExplorer
                 num = 1;
                 validInputs.Add(num);
                 return num;
+            }
+        }
+
+        private static void DisplayLevelLayout(Level currentLevel, ParentRoom currentRoom)
+        // displays the current layout of the current level to the user, the room the user
+        // is currently in, and a number grid for easier use
+        {
+            ParentRoom[,] levelLayout = currentLevel.GetLevelLayout();
+
+            for (int i = 0; i < levelLayout.GetLength(0); i++)
+            {
+                // display y axis numbers
+                Console.Write($"{i}    ");
+                for (int j = 0; j < levelLayout.GetLength(0); j++)
+                {
+                    // display room status
+                    string room;
+                    if (levelLayout[i, j] == currentRoom)
+                        room = "[ x ]";
+                    else if (levelLayout[i, j] != null)
+                        room = "[   ]";
+                    else
+                        room = "XXXXX";
+                    Console.Write($"{room}");
+                }
+                Console.WriteLine();
+            }
+
+            Console.Write("     ");
+            // display x axis numbers
+            for (int i = 0; i < levelLayout.GetLength(0); i++)
+            {
+                Console.Write($"{i}    ");
             }
         }
     }
