@@ -43,7 +43,7 @@ namespace DungeonExplorer
                         Console.WriteLine("E - a room to the East");
                         break;
                     case 'S':
-                        Console.WriteLine("S - a room to the Sorth");
+                        Console.WriteLine("S - a room to the South");
                         break;
                     case 'W':
                         Console.WriteLine("W - a room to the West");

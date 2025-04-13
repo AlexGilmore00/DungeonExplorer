@@ -108,7 +108,7 @@ namespace DungeonExplorer
         // displays the current layout of the current level to the user, the room the user
         // is currently in, and a number grid for easier use
         {
-            ParentRoom[,] levelLayout = currentLevel.GetLevelLayout();
+            ParentRoom[,] levelLayout = currentLevel.LevelLayout;
 
             for (int i = 0; i < levelLayout.GetLength(0); i++)
             {
@@ -119,11 +119,11 @@ namespace DungeonExplorer
                     // display room status
                     string room;
                     if (levelLayout[i, j] == currentRoom)
-                        room = "[ x ]";
+                        room = "[ i ]";
                     else if (levelLayout[i, j] != null)
                         room = "[   ]";
                     else
-                        room = "XXXXX";
+                        room = "#~#~#";
                     Console.Write($"{room}");
                 }
                 Console.WriteLine();

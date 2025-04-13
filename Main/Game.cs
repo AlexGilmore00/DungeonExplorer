@@ -136,6 +136,7 @@ namespace DungeonExplorer
                         break;
                     case ConsoleKey.D5:
                     case ConsoleKey.NumPad5:
+                        Console.WriteLine();
                         _player.DisplayInventoryContents();
                         break;
                     default:

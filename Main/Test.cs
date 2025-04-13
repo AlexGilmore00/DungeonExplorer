@@ -11,6 +11,10 @@ namespace DungeonExplorer
     {
         // class used for static function calls to test implementation
 
+        // !!add a RunMainTests function that instanciates a game object and from there
+        // runs main tests on all functions to see if inputs will be ok and all errors
+        // handled. output the reports of these tests into a text file!!
+
         public static void TestRoomGeneration(int difficulty)
         {
             ParentRoom room = new DefaultRoom(difficulty);
@@ -84,7 +88,7 @@ namespace DungeonExplorer
 
         public static void ShowCurrentLevelLayout(Level level, ParentRoom currentRoom = null)
         {
-            ParentRoom[,] levelLayout = level.GetLevelLayout();
+            ParentRoom[,] levelLayout = level.LevelLayout;
 
             // display level layout as well as number of rooms
             for (int i = 0; i < levelLayout.GetLength(0); i++)
