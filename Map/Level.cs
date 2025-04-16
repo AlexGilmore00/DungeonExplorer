@@ -198,7 +198,7 @@ namespace DungeonExplorer
                     if (LevelLayout[y, x] == null)
                         continue;
 
-                    if (y - 1 > 0)
+                    if (y - 1 >= 0)
                         if (LevelLayout[y - 1, x] != null)
                             LevelLayout[y, x].AddConnection('N');
                     if (x + 1 < levelSize)
@@ -207,7 +207,7 @@ namespace DungeonExplorer
                     if (y + 1 < levelSize)
                         if (LevelLayout[y + 1, x] != null)
                             LevelLayout[y, x].AddConnection('S');
-                    if (x - 1 > 0)
+                    if (x - 1 >= 0)
                         if (LevelLayout[y, x - 1] != null)
                             LevelLayout[y, x].AddConnection('W');
                 }

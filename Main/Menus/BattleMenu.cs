@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    internal class BattleMenu
+    public abstract class BattleMenu
     {
         public static void ChooseEnemyToFight(Player player, ParentRoom currentRoom)
         // entry point to the Battle Menu

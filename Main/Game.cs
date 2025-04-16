@@ -137,7 +137,7 @@ namespace DungeonExplorer
                     case ConsoleKey.D5:
                     case ConsoleKey.NumPad5:
                         Console.WriteLine();
-                        _player.DisplayInventoryContents();
+                        PlayerMenu.OpenPayerMenu(_player);
                         break;
                     default:
                         Console.WriteLine("unknown command...");

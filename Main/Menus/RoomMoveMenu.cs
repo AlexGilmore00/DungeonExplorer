@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    internal class RoomMoveMenu
+    public abstract class RoomMoveMenu
     {
         public static bool MoveRoom(Level currentLevel, ParentRoom currentRoom)
         // entry point to Room Move Menu

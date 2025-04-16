@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    internal class ContainerMenu
+    public abstract class ContainerMenu
     {
         public static void ChooseContainer(Player player, ParentRoom currentRoom)
         // entry point for the Container Menu
@@ -20,7 +20,7 @@ namespace DungeonExplorer
                 // keep track of valid inputs since number of containers can change
                 HashSet<int> validInputs = new HashSet<int>();
                 // display the list of containers in the room
-                Console.WriteLine("which contianer would you like to loot?");
+                Console.WriteLine("which container would you like to loot?");
                 int counter = 1;
                 foreach (ParentContainer container in currentRoom.Containers)
                 {
