@@ -68,6 +68,8 @@
     <Compile Include="Items\Equipables\Armour\TesterHelm.cs" />
     <Compile Include="Items\Consumables\TesterPotion.cs" />
     <Compile Include="Main\Menus\RoomMoveMenu.cs" />
+    <Compile Include="Items\Equipables\Weapons\TesterZwei.cs" />
+    <Compile Include="Items\Equipables\Weapons\TesterShield.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -113,6 +114,107 @@ namespace DungeonExplorer
             {
                 Console.Write($"{i}    ");
             }
+        }
+
+        public static void TestEquipAndUnequip()
+        {
+            Console.WriteLine("TESTING EQUIPPING AND UNEQUIPPING ITEMS");
+
+            // set up objects
+            int baseDmg = 10;
+            int baseDef = 5;
+            Player player = new Player("TesterMan", 100, baseDmg, baseDef);
+
+            ParentWeapon sword = new TesterSword();
+            ParentWeapon shield = new TesterShield();
+            ParentWeapon zwei = new TesterZwei();
+            ParentArmour helm = new TesterHelm();
+
+            //
+            // try equip individual pieces
+            //
+
+            List<ParentWeapon> weps = new List<ParentWeapon> { sword, zwei, shield, };
+            Dictionary<string, ParentWeapon> eqWeps = new Dictionary<string, ParentWeapon>();
+            Dictionary<string, ParentArmour> eqArms = new Dictionary<string, ParentArmour>();
+
+            // weapons
+            foreach (ParentWeapon wep in weps)
+            {
+                Console.WriteLine($"trying to equip {wep.Name} in {wep.Slot} where Two Handed = {wep.IsTwoHanded}");
+                // equip item
+                player.TryEquipItem(wep);
+                Debug.Assert(player.CurrentAtkDmg == baseDmg + wep.Attack && player.CurrentDefence == baseDef + wep.Defence,
+                    $"WARNING!! error when adding stats of {wep.Name} to player. atk:{player.CurrentAtkDmg}," +
+                    $" def:{player.CurrentDefence}");
+                eqWeps = player.GetEquippedWeapons();
+                if (wep.IsTwoHanded)
+                    Debug.Assert(eqWeps["Rhand"] == wep && eqWeps["Lhand"] == wep, $"WARNING!! error when equipping" +
+                        $"{wep.Name} to players equipped dict");
+                else
+                    Debug.Assert(eqWeps[wep.Slot] == wep, $"WARNING!! error when equipping" +
+                        $"{wep.Name} to players equipped dict");
+                // uniquip item
+                player.UnequipItem(wep.Slot);
+                eqWeps = player.GetEquippedWeapons();
+                Debug.Assert(player.CurrentAtkDmg == baseDmg && player.CurrentDefence == baseDef,
+                    $"WARNING!! error when removing stats of {wep.Name} when unequipping it." +
+                    $"atk:{player.CurrentAtkDmg}, def:{player.CurrentDefence}");
+                if (wep.IsTwoHanded)
+                    Debug.Assert(eqWeps["Rhand"] == null && eqWeps["Lhand"] == null, $"WARNING!! error when" +
+                        $"uniquipping item {wep.Name} from players equipped dict");
+                else
+                    Debug.Assert(eqWeps[wep.Slot] == null, $"WARNING!! error when unequipping {wep.Name}" +
+                        $" from players equipped dict");
+            }
+
+            // armour
+            Console.WriteLine($"trying to equip {helm.Name} to {helm.Slot}");
+            // equip item
+            player.TryEquipItem(helm);
+            eqArms = player.GetEquippedArmour();
+            Debug.Assert(player.CurrentDefence == baseDef + helm.Defence, $"WARNING!! error when trying to add" +
+                $"stats of {helm.Name} to player. def:{player.CurrentDefence}");
+            Debug.Assert(eqArms[helm.Slot] == helm, $"WARNING!! error when equipping {helm.Name} to players" +
+                $"equipped dict.");
+            // unequip item
+            player.UnequipItem(helm.Slot);
+            eqArms = player.GetEquippedArmour();
+            Debug.Assert(player.CurrentDefence == baseDef, $"WARNING!! error when removing stats of {helm.Name}" +
+                $"from player");
+            Debug.Assert(eqArms[helm.Slot] == null, $"WARNING!! error when removing {helm.Name} from players" +
+                "equipped dict");
+
+            //
+            // try overriding two handed with one handed
+            //
+
+            Console.WriteLine($"trying to equip {shield.Name} over {zwei.Name}");
+            player.TryEquipItem(zwei);
+            player.TryEquipItem(shield);
+            eqWeps = player.GetEquippedWeapons();
+            Debug.Assert(player.CurrentAtkDmg == baseDmg + shield.Attack && player.CurrentDefence == baseDef + shield.Defence,
+                "WARNING!! error when changing stats after overriding the two handed weapon");
+            Debug.Assert(eqWeps["Rhand"] == null && eqWeps["Lhand"] == shield, "WARNING!! error when handling " +
+                "players equipped dict when overriding a two hander with a one hander");
+
+            player.UnequipItem(shield.Slot);
+
+            //
+            // try overriding lhanded one hander with two hander
+            //
+
+
+            Console.WriteLine($"tring to equip {zwei.Name} over {shield.Name}");
+            player.TryEquipItem(shield);
+            player.TryEquipItem(zwei);
+            eqWeps = player.GetEquippedWeapons();
+            Debug.Assert(player.CurrentAtkDmg == baseDmg + zwei.Attack && player.CurrentDefence == baseDef + zwei.Defence,
+                $"WARNING!! error when changing stats when ovveriding a lef handed one hander with a two hander");
+            Debug.Assert(eqWeps["Rhand"] == zwei && eqWeps["Lhand"] == zwei, $"WARNING!! error when handling " +
+                $"players equipped dict when overriding a left handed one hander with a two hander");
+
+            Console.WriteLine("TESTING FINISHED. if no warning pop up then all tests were successful\n");
         }
     }
 }

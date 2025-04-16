@@ -1,21 +1,23 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DungeonExplorer
 {
-    public class TesterSword : ParentWeapon
+    internal class TesterZwei : ParentWeapon
     {
-        public TesterSword()
+        public TesterZwei()
         {
-            Name = "TesterSword";
+            Name = "TesterZwei";
             Category = "Weapon";
             Slot = "Rhand";
-            Attack = 10;
+            Attack = 20;
             Defence = 0;
-            IsTwoHanded = false;
+            IsTwoHanded = true;
             IsShield = false;
         }
     }

@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    public class TesterSword : ParentWeapon
+    internal class TesterShield : ParentWeapon
     {
-        public TesterSword()
+        public TesterShield()
         {
-            Name = "TesterSword";
+            Name = "TesterShield";
             Category = "Weapon";
-            Slot = "Rhand";
-            Attack = 10;
-            Defence = 0;
+            Slot = "Lhand";
+            Attack = 0;
+            Defence = 5;
             IsTwoHanded = false;
             IsShield = false;
         }

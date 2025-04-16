@@ -8,6 +8,7 @@ namespace DungeonExplorer
 {
     public abstract class ParentEquipable : ParentItem
     {
+        public int Defence { get; protected set; }
         // which slot the item should be equiped in...
         // "Head", "Chest", "Legs", "Feet", "Rhand", "Lhand"
         public string Slot
@@ -27,8 +28,6 @@ namespace DungeonExplorer
         private string _slot;
         private HashSet<string> _validSlots = new HashSet<string> {
             "Head", "Chest", "Legs", "Feet", "Rhand", "Lhand" };
-        public int Attack {  get; protected set; }
-        public int Defence { get; protected set; }
 
         public ParentEquipable() { }
     }

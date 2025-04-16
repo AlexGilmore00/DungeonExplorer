@@ -35,7 +35,7 @@ namespace DungeonExplorer
                 }
                 else { break; }
             }
-            _player = new Player(name, 100);
+            _player = new Player(name, 100, 10, 5);
             Console.WriteLine();
         }
         public void Start()
