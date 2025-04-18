@@ -13,5 +13,16 @@ namespace DungeonExplorer
         public bool IsTwoHanded;
         public bool IsShield;
         public ParentWeapon() { }
+
+        public override void DisplayDescription()
+        {
+            Console.WriteLine($"{Name}:\n" +
+                $"Attack: {Attack}\n" +
+                $"Defence: {Defence}\n" +
+                $"Two handed: {IsTwoHanded}\n" +
+                $"Shield: {IsShield}\n" +
+                $"Slot: {Slot}\n" +
+                $"{_flavourText}\n");
+        }
     }
 }

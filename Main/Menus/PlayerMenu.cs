@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Mail;
+using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,13 +15,17 @@ namespace DungeonExplorer
         public static void OpenPayerMenu(Player player)
         // entry point to the player menu
         // allow the player to choose between displaying their stats
-        // or accessing their inventory
+        // or manipulating their inventory
+        // can access inventory to equip/use items
+        // can sort inventory !!NEED ADDING!!
+        // can search inventory !!NEEDS ADDING!!LINQ!!
         {
             while (true)
             {
                 Console.WriteLine("what would you like to do?\n" +
                 "[1] display player stats\n" +
-                "[2] look at inventory\n" +
+                "[2] display full inventory\n" +
+                "[3] open inventory\n" +
                 "[r] return to previous menu\n");
 
                 // get player input
@@ -36,7 +41,12 @@ namespace DungeonExplorer
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
                         Console.WriteLine();
-                        InventoryMenu(player);
+                        player.DisplayInventoryContents();
+                        break;
+                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
+                        Console.WriteLine();
+                        OpenInventory(player);
                         break;
                     case ConsoleKey.R:
                         return;
@@ -50,9 +60,34 @@ namespace DungeonExplorer
         private static void DisplayPlayerStats(Player player)
         // display the players stats
         {
-            Console.WriteLine($"health: {player.Health}/{player.MaxHealth}\n" +
+            // set up the players equipped items
+            string head;
+            if (player.EqArmour["Head"] != null) { head = player.EqArmour["Head"].Name;  } else { head = "nothing"; }
+            string chest;
+            if (player.EqArmour["Chest"] != null) { chest = player.EqArmour["Chest"].Name; } else { chest = "nothing"; }
+            string legs;
+            if (player.EqArmour["Legs"] != null) { legs = player.EqArmour["Legs"].Name; } else { legs = "nothing"; }
+            string feet;
+            if (player.EqArmour["Feet"] != null) { feet = player.EqArmour["Feet"].Name; } else { feet = "nothing"; }
+            string rhand;
+            if (player.EqWeapon["Rhand"] != null) { rhand = player.EqWeapon["Rhand"].Name; } else { rhand = "nothing"; }
+            string lhand;
+            if (player.EqWeapon["Lhand"] != null) { lhand = player.EqWeapon["Lhand"].Name; } else { lhand = "nothing"; }
+
+
+            Console.WriteLine($"name: {player.Name}\n" +
+                $"health: {player.Health}/{player.MaxHealth}\n" +
                 $"Current Damage: {player.CurrentAtkDmg}\n" +
-                $"Cuttent Defence: {player.CurrentDefence}\n");
+                $"Cuttent Defence: {player.CurrentDefence}\n" +
+                $"\n" +
+                $"EQUIPPED ITEMS\n" +
+                $"head: {head}\n" +
+                $"chest: {chest}\n" +
+                $"legs: {legs}\n" +
+                $"feel: {feet}\n" +
+                $"right hand: {rhand}\n" +
+                $"left hand: {lhand}");
+            Console.WriteLine();
         }
 
         private static void InventoryMenu(Player player)
@@ -170,11 +205,14 @@ namespace DungeonExplorer
                 }
             }
 
-            // add the trailing page
-            pages.Add(new ParentItem[tralingPageSize]);
-            for (int i = 0; i < tralingPageSize; i++)
+            // add the trailing page if necesarry
+            if (tralingPageSize > 0)
             {
-                pages[fullPageAmount][i] = itemList[counter++];
+                pages.Add(new ParentItem[tralingPageSize]);
+                for (int i = 0; i < tralingPageSize; i++)
+                {
+                    pages[fullPageAmount][i] = itemList[counter++];
+                }
             }
 
             int pageNumber = 0;
@@ -213,7 +251,7 @@ namespace DungeonExplorer
                         continue;
                     }
                     // if its a valid number, select the item
-                    SelectItem(activePage[numInput - 1]);
+                    SelectItem(player, activePage[numInput - 1]);
                 }
                 else
                 // if the item is not a number, sheck if it is another valid char input
@@ -250,10 +288,53 @@ namespace DungeonExplorer
             }
         }
 
-        private static void SelectItem(ParentItem item)
+        private static void SelectItem(Player player, ParentItem item)
         // menu for how you can interact with an item once selected from the inventory
+        // can inspect all items
+        // can equip equipables
+        // can use consumables !!NEEDS ADDING!!
         {
-            Console.WriteLine(item.Name);
+            while (true)
+            {
+                Console.WriteLine($"what would you like to do with: {item.Name}?\n" +
+                    $"[1] inspect item");
+                if (item is ParentEquipable)
+                {
+                    Console.WriteLine("[2] equip item");
+                }
+                Console.WriteLine("[r] return to previous menu");
+
+                // get player input
+                ConsoleKeyInfo input = Console.ReadKey(true);
+
+                switch (input.Key)
+                {
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        Console.WriteLine();
+                        item.DisplayDescription();
+                        break;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        Console.WriteLine();
+                        if (item is ParentEquipable)
+                        {
+                            player.TryEquipItem((ParentEquipable)item);
+                            Console.WriteLine($"{item.Name} was equipped");
+                            return;
+                        }
+                        else
+                        {
+                            Console.WriteLine("unknown command...");
+                        }
+                        break;
+                    case ConsoleKey.R:
+                        return;
+                    default:
+                        Console.WriteLine("unknown command...");
+                        break;
+                }
+            }
         }
     }
 }

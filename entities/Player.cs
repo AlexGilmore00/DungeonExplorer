@@ -11,18 +11,8 @@ namespace DungeonExplorer
         public List<ParentConsumable> InvConsumables { get; private set; }
         // dicts to keep track of what items the player has equipped
         // keys correspond exactly to an items slot member
-        private Dictionary<string, ParentArmour> _eqArmour = new Dictionary<string, ParentArmour>
-        {
-            { "Head", null },
-            { "Chest", null },
-            { "Legs", null },
-            { "Feet", null }
-        };
-        private Dictionary<string, ParentWeapon> _eqWeapon = new Dictionary<string, ParentWeapon>
-        {
-            { "Rhand", null },
-            { "Lhand", null }
-        };
+        public Dictionary<string, ParentArmour> EqArmour { get; private set; }
+        public Dictionary<string, ParentWeapon> EqWeapon {  get; private set; }
 
         public Player(string name, int maxHealth, int baseDmg, int BaseDef) 
         {
@@ -30,6 +20,20 @@ namespace DungeonExplorer
             InvWeapons = new List<ParentWeapon>();
             InvArmour = new List<ParentArmour>();
             InvConsumables = new List<ParentConsumable>();
+
+            // set up equipped items
+            EqArmour = new Dictionary<string, ParentArmour>
+            {
+                { "Head", null },
+                { "Chest", null },
+                { "Legs", null },
+                { "Feet", null }
+            };
+            EqWeapon = new Dictionary<string, ParentWeapon>
+            {
+                { "Rhand", null },
+                { "Lhand", null }
+            };
 
             Name = name;
             MaxHealth = maxHealth;
@@ -116,27 +120,27 @@ namespace DungeonExplorer
                     case "Weapon":
                         ParentWeapon wepItem = (ParentWeapon)item;
                         // check if the weapon is two handed and will override the right hand weapon
-                        if (wepItem.IsTwoHanded && _eqWeapon["Lhand"] != null)
+                        if (wepItem.IsTwoHanded && EqWeapon["Lhand"] != null)
                         {
                             Console.WriteLine($"this weapon requires two hands to wield and so equipping it will " +
-                                $"unequip the {_eqWeapon["Lhand"].Name} in your left hand");
+                                $"unequip the {EqWeapon["Lhand"].Name} in your left hand");
                             // !!ADD FUNCTIONALITY FOR A CONFIRM FOR THIS OPTION!!
                             UnequipItem("Lhand");
                         }
                         // check if equipping a left hand weapon will need to override a two handed
                         // weapon in the right hand
-                        if (_eqWeapon["Lhand"] != null)
+                        if (EqWeapon["Lhand"] != null)
                         {
-                            if (wepItem.Slot == "Lhand" && _eqWeapon["Lhand"].IsTwoHanded)
+                            if (wepItem.Slot == "Lhand" && EqWeapon["Lhand"].IsTwoHanded)
                             {
                                 Console.WriteLine($"equipping this weapon in your left hand will uneqiup your " +
-                                    $"{_eqWeapon["Lhand"].Name} as this weapon required two hands to wield");
+                                    $"{EqWeapon["Lhand"].Name} as this weapon required two hands to wield");
                                 // !!ADD FUNCTIONALITY FOR A CONFIRM FOR THIS OPTION!!
                                 UnequipItem("Lhand");
                             }
                         }
                         // check if there is still already an item in the desired slot that needs to be removed
-                        if (_eqWeapon[wepItem.Slot] != null)
+                        if (EqWeapon[wepItem.Slot] != null)
                         {
                             UnequipItem(wepItem.Slot);
                         }
@@ -146,7 +150,7 @@ namespace DungeonExplorer
                     case "Armour":
                         ParentArmour armItem = (ParentArmour)item;
                         // check if there is already an item in that slot that needs to be unequipped
-                        if (_eqArmour[armItem.Slot] != null)
+                        if (EqArmour[armItem.Slot] != null)
                         {
                             UnequipItem(armItem.Slot);
                         }
@@ -174,27 +178,31 @@ namespace DungeonExplorer
         private void EquipWeapon(ParentWeapon weapon)
         // equips a weapon to to the player
         {
+            // change the name of the weapon now its equipped
+            weapon.ChangeNameEquip();
             // add this weapons stats to the player
             CurrentAtkDmg += weapon.Attack;
             CurrentDefence += weapon.Defence;
 
             // equip the weapon to the right slot
-            _eqWeapon[weapon.Slot] = weapon;
+            EqWeapon[weapon.Slot] = weapon;
             // also equip it in the left hand if the weapon is two handed
             if (weapon.IsTwoHanded)
             {
-                _eqWeapon["Lhand"] = weapon;
+                EqWeapon["Lhand"] = weapon;
             }
         }
 
         private void EquipArmour(ParentArmour armour)
         // equips armour to the player
         {
+            //change the name of the armour now its equipped
+            armour.ChangeNameEquip();
             // add the armours stats to the player
             CurrentDefence += armour.Defence;
 
             // equip the armour
-            _eqArmour[armour.Slot] = armour;
+            EqArmour[armour.Slot] = armour;
         }
 
         public void UnequipItem(string slot)
@@ -203,31 +211,35 @@ namespace DungeonExplorer
             // weapons
             if (slot == "Rhand" | slot == "Lhand")
             {
+                //change the name of the weapon now its unequipped
+                EqWeapon[slot].ChangeNameUnequip();
                 // remove the stats from the player
-                CurrentAtkDmg -= _eqWeapon[slot].Attack;
-                CurrentDefence -= _eqWeapon[slot].Defence;
+                CurrentAtkDmg -= EqWeapon[slot].Attack;
+                CurrentDefence -= EqWeapon[slot].Defence;
 
                 // check if the weapon is two handed
-                if (_eqWeapon[slot].IsTwoHanded)
+                if (EqWeapon[slot].IsTwoHanded)
                 {
                     // if so, unequip it from both hands
-                    _eqWeapon["Rhand"] = null;
-                    _eqWeapon["Lhand"] = null;
+                    EqWeapon["Rhand"] = null;
+                    EqWeapon["Lhand"] = null;
                 }
                 else
                 {
                     // otherwise just unequip it from the equipped hand
-                    _eqWeapon[slot] = null;
+                    EqWeapon[slot] = null;
                 }
             }
             // armour
             else if (slot == "Head" | slot == "Chest" | slot == "Legs" | slot == "Feet")
             {
+                // change the name of the armour now its unequipped
+                EqArmour[slot].ChangeNameUnequip();
                 // remove the stats from the player
-                CurrentDefence -= _eqArmour[slot].Defence;
+                CurrentDefence -= EqArmour[slot].Defence;
 
                 // unequip the armour
-                _eqArmour[slot] = null;
+                EqArmour[slot] = null;
             }
             else
             {
@@ -235,16 +247,6 @@ namespace DungeonExplorer
                     "this means the stats given by the item have not been removed from the player despite" +
                     "the item likely no longer being in the players equipped dict.");
             }
-        }
-
-        public Dictionary<string, ParentWeapon> GetEquippedWeapons()
-        {
-            return _eqWeapon;
-        }
-        
-        public Dictionary<string, ParentArmour> GetEquippedArmour()
-        {
-            return _eqArmour;
         }
     }
 }

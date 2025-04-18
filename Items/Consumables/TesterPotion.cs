@@ -12,6 +12,8 @@ namespace DungeonExplorer
         {
             Name = "TesterPotion";
             Category = "Consumable";
+            _effectDescription = "heals 15 hp";
+            _flavourText = "a potion used for testing";
         }
     }
 }

@@ -44,6 +44,8 @@ namespace DungeonExplorer
             player.PickUpItem(new TesterHelm());
             player.PickUpItem(new TesterPotion());
             player.PickUpItem(new TesterPotion());
+            player.PickUpItem(new TesterShield());
+            player.PickUpItem(new TesterZwei());
 
             for (int i = 0; i < 25; i++)
             {
@@ -152,7 +154,7 @@ namespace DungeonExplorer
                 Debug.Assert(player.CurrentAtkDmg == baseDmg + wep.Attack && player.CurrentDefence == baseDef + wep.Defence,
                     $"WARNING!! error when adding stats of {wep.Name} to player. atk:{player.CurrentAtkDmg}," +
                     $" def:{player.CurrentDefence}");
-                eqWeps = player.GetEquippedWeapons();
+                eqWeps = player.EqWeapon;
                 if (wep.IsTwoHanded)
                     Debug.Assert(eqWeps["Rhand"] == wep && eqWeps["Lhand"] == wep, $"WARNING!! error when equipping" +
                         $"{wep.Name} to players equipped dict");
@@ -161,7 +163,7 @@ namespace DungeonExplorer
                         $"{wep.Name} to players equipped dict");
                 // uniquip item
                 player.UnequipItem(wep.Slot);
-                eqWeps = player.GetEquippedWeapons();
+                eqWeps = player.EqWeapon;
                 Debug.Assert(player.CurrentAtkDmg == baseDmg && player.CurrentDefence == baseDef,
                     $"WARNING!! error when removing stats of {wep.Name} when unequipping it." +
                     $"atk:{player.CurrentAtkDmg}, def:{player.CurrentDefence}");
@@ -177,14 +179,14 @@ namespace DungeonExplorer
             Console.WriteLine($"trying to equip {helm.Name} to {helm.Slot}");
             // equip item
             player.TryEquipItem(helm);
-            eqArms = player.GetEquippedArmour();
+            eqArms = player.EqArmour;
             Debug.Assert(player.CurrentDefence == baseDef + helm.Defence, $"WARNING!! error when trying to add" +
                 $"stats of {helm.Name} to player. def:{player.CurrentDefence}");
             Debug.Assert(eqArms[helm.Slot] == helm, $"WARNING!! error when equipping {helm.Name} to players" +
                 $"equipped dict.");
             // unequip item
             player.UnequipItem(helm.Slot);
-            eqArms = player.GetEquippedArmour();
+            eqArms = player.EqArmour;
             Debug.Assert(player.CurrentDefence == baseDef, $"WARNING!! error when removing stats of {helm.Name}" +
                 $"from player");
             Debug.Assert(eqArms[helm.Slot] == null, $"WARNING!! error when removing {helm.Name} from players" +
@@ -197,7 +199,7 @@ namespace DungeonExplorer
             Console.WriteLine($"trying to equip {shield.Name} over {zwei.Name}");
             player.TryEquipItem(zwei);
             player.TryEquipItem(shield);
-            eqWeps = player.GetEquippedWeapons();
+            eqWeps = player.EqWeapon;
             Debug.Assert(player.CurrentAtkDmg == baseDmg + shield.Attack && player.CurrentDefence == baseDef + shield.Defence,
                 "WARNING!! error when changing stats after overriding the two handed weapon");
             Debug.Assert(eqWeps["Rhand"] == null && eqWeps["Lhand"] == shield, "WARNING!! error when handling " +
@@ -213,7 +215,7 @@ namespace DungeonExplorer
             Console.WriteLine($"tring to equip {zwei.Name} over {shield.Name}");
             player.TryEquipItem(shield);
             player.TryEquipItem(zwei);
-            eqWeps = player.GetEquippedWeapons();
+            eqWeps = player.EqWeapon;
             Debug.Assert(player.CurrentAtkDmg == baseDmg + zwei.Attack && player.CurrentDefence == baseDef + zwei.Defence,
                 $"WARNING!! error when changing stats when ovveriding a lef handed one hander with a two hander");
             Debug.Assert(eqWeps["Rhand"] == zwei && eqWeps["Lhand"] == zwei, $"WARNING!! error when handling " +

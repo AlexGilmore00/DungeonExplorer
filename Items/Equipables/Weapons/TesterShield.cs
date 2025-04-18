@@ -11,12 +11,14 @@ namespace DungeonExplorer
         public TesterShield()
         {
             Name = "TesterShield";
+            _baseName = Name;
             Category = "Weapon";
             Slot = "Lhand";
             Attack = 0;
             Defence = 5;
             IsTwoHanded = false;
             IsShield = false;
+            _flavourText = "a shield used for testing";
         }
     }
 }

@@ -11,9 +11,11 @@ namespace DungeonExplorer
         public TesterHelm()
         {
             Name = "TesterHelm";
+            _baseName = Name;
             Category = "Armour";
             Slot = "Head";
             Defence = 10;
+            _flavourText = "a helmet used for testing";
         }
     }
 }

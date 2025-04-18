@@ -13,12 +13,14 @@ namespace DungeonExplorer
         public TesterZwei()
         {
             Name = "TesterZwei";
+            _baseName = Name;
             Category = "Weapon";
             Slot = "Rhand";
             Attack = 20;
             Defence = 0;
             IsTwoHanded = true;
             IsShield = false;
+            _flavourText = "a zweihander used for testing";
         }
     }
 }

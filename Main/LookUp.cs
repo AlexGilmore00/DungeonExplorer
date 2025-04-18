@@ -82,7 +82,7 @@ namespace DungeonExplorer
             {
                 // test container loot table
                 case -1:
-                    int itemNum = rnd.Next(0, 3);  //!remember to update random number bounds when adding new items!
+                    int itemNum = rnd.Next(0, 5);  //!remember to update random number bounds when adding new items!
 
                     switch (itemNum)
                     {
@@ -92,6 +92,10 @@ namespace DungeonExplorer
                             return new TesterSword();
                         case 2:
                             return new TesterPotion();
+                        case 3:
+                            return new TesterShield();
+                        case 4:
+                            return new TesterZwei();
                         default:
                             Console.WriteLine("WARNING!! random range too large for test container loot table.");
                             return null;

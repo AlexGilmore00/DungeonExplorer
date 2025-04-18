@@ -9,6 +9,10 @@ namespace DungeonExplorer
     public abstract class ParentEquipable : ParentItem
     {
         public int Defence { get; protected set; }
+
+        // base name of the weapon to reset to if the name is changed after equipping
+        protected string _baseName;
+
         // which slot the item should be equiped in...
         // "Head", "Chest", "Legs", "Feet", "Rhand", "Lhand"
         public string Slot
@@ -30,5 +34,16 @@ namespace DungeonExplorer
             "Head", "Chest", "Legs", "Feet", "Rhand", "Lhand" };
 
         public ParentEquipable() { }
+
+        public void ChangeNameEquip()
+        // changes the name of the weapon when equipped
+        {
+            Name = _baseName + " (equipped)";
+        }
+
+        public void ChangeNameUnequip()
+        {
+            Name = _baseName;
+        }
     }
 }
