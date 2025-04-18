@@ -6,11 +6,11 @@ namespace DungeonExplorer
 {
     public class Player : LivingEntity
     {
-        private List<ParentWeapon> _invWeapons = new List<ParentWeapon>();
-        private List<ParentArmour> _invArmour = new List<ParentArmour>();
-        private List<ParentConsumable> _invComsumables = new List<ParentConsumable>();
+        public List<ParentWeapon> InvWeapons {  get; private set; }
+        public List<ParentArmour> InvArmour {  get; private set; }
+        public List<ParentConsumable> InvConsumables { get; private set; }
         // dicts to keep track of what items the player has equipped
-        //keys correspond exactly to an items slot member
+        // keys correspond exactly to an items slot member
         private Dictionary<string, ParentArmour> _eqArmour = new Dictionary<string, ParentArmour>
         {
             { "Head", null },
@@ -26,6 +26,11 @@ namespace DungeonExplorer
 
         public Player(string name, int maxHealth, int baseDmg, int BaseDef) 
         {
+            // set up inventory
+            InvWeapons = new List<ParentWeapon>();
+            InvArmour = new List<ParentArmour>();
+            InvConsumables = new List<ParentConsumable>();
+
             Name = name;
             MaxHealth = maxHealth;
             Health = MaxHealth;
@@ -44,15 +49,15 @@ namespace DungeonExplorer
                 {
                     case "Weapon":
                         ParentWeapon wepItem = (ParentWeapon)item;
-                        _invWeapons.Add(wepItem);
+                        InvWeapons.Add(wepItem);
                         break;
                     case "Armour":
                         ParentArmour armItem = (ParentArmour)item;
-                        _invArmour.Add(armItem);
+                        InvArmour.Add(armItem);
                         break;
                     case "Consumable":
                         ParentConsumable conItem = (ParentConsumable)item;
-                        _invComsumables.Add(conItem);
+                        InvConsumables.Add(conItem);
                         break;
                     default:
                         Console.WriteLine($"WARNING! unexpected error occured when trying to add " +
@@ -78,28 +83,29 @@ namespace DungeonExplorer
         {
             int counter = 1;
             Console.WriteLine("WEAPONS");
-            foreach (var weapon in _invWeapons)
+            foreach (var weapon in InvWeapons)
             {
                 Console.WriteLine($"{counter}. {weapon.Name}");
                 counter++;
             }
             counter = 1;
             Console.WriteLine("ARMOUR");
-            foreach (var armour in _invArmour)
+            foreach (var armour in InvArmour)
             {
                 Console.WriteLine($"{counter}. {armour.Name}");
                 counter++;
             }
             counter = 1;
             Console.WriteLine("CONSUMABLES");
-            foreach (var consumable in _invComsumables)
+            foreach (var consumable in InvConsumables)
             {
                 Console.WriteLine($"{counter}. {consumable.Name}");
                 counter++;
             }
+            Console.WriteLine();
         }
 
-        public void TryEquipItem(ParentItem item)
+        public void TryEquipItem(ParentEquipable item)
         // try cast a given item to its relevant child type and proceed to
         // equipping it if the valid slot is in a state to have something equipped to it
         {

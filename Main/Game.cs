@@ -36,6 +36,7 @@ namespace DungeonExplorer
                 else { break; }
             }
             _player = new Player(name, 100, 10, 5);
+            Test.SetupTestInventory(_player);
             Console.WriteLine();
         }
         public void Start()
@@ -96,7 +97,7 @@ namespace DungeonExplorer
                     Console.WriteLine("[-] there are no containers to loot");
                 }
                 Console.WriteLine("[4] move rooms");
-                Console.WriteLine("[5] display inventory");
+                Console.WriteLine("[5] open player menu");
 
                 //get user numeric input
                 ConsoleKeyInfo input = Console.ReadKey(true);
