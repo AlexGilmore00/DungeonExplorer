@@ -6,8 +6,8 @@ namespace DungeonExplorer
 {
     public class Player : LivingEntity
     {
-        public List<ParentWeapon> InvWeapons {  get; private set; }
-        public List<ParentArmour> InvArmour {  get; private set; }
+        public List<ParentWeapon> InvWeapons { get; private set; }
+        public List<ParentArmour> InvArmour { get; private set; }
         public List<ParentConsumable> InvConsumables { get; private set; }
         // dicts to keep track of what items the player has equipped
         // keys correspond exactly to an items slot member
@@ -43,9 +43,11 @@ namespace DungeonExplorer
             CurrentAtkDmg = baseDmg;
             CurrentDefence = BaseDef;
         }
-        public void PickUpItem(ParentItem item)
+        public void PickUpItem(ParentItem item, bool remove = false)
         // takes an item as input, casts it to the relevant child class, and adds
         // it to the relevant inventory list
+        // the bool remove can instead be set to true to remove an item from the players inventory
+        // !!MAYBE ADD CHECKS FOR IF AN UNPRESENT ITEM IS ATTEMPLTED TO BE REMOVED!!
         {
             try
             {
@@ -53,15 +55,24 @@ namespace DungeonExplorer
                 {
                     case "Weapon":
                         ParentWeapon wepItem = (ParentWeapon)item;
-                        InvWeapons.Add(wepItem);
+                        if (!remove)
+                            InvWeapons.Add(wepItem);
+                        else
+                            InvWeapons.Remove(wepItem);
                         break;
                     case "Armour":
                         ParentArmour armItem = (ParentArmour)item;
-                        InvArmour.Add(armItem);
+                        if (!remove)
+                            InvArmour.Add(armItem);
+                        else
+                            InvArmour.Remove(armItem);
                         break;
                     case "Consumable":
                         ParentConsumable conItem = (ParentConsumable)item;
-                        InvConsumables.Add(conItem);
+                        if (!remove)
+                            InvConsumables.Add(conItem);
+                        else
+                            InvConsumables.Remove(conItem);
                         break;
                     default:
                         Console.WriteLine($"WARNING! unexpected error occured when trying to add " +

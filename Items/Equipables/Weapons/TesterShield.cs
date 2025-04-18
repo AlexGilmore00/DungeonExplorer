@@ -15,7 +15,7 @@ namespace DungeonExplorer
             Category = "Weapon";
             Slot = "Lhand";
             Attack = 0;
-            Defence = 5;
+            Defence = 2;
             IsTwoHanded = false;
             IsShield = false;
             _flavourText = "a shield used for testing";

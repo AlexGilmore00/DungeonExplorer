@@ -21,5 +21,7 @@ namespace DungeonExplorer
                 $"Effect: {_effectDescription}\n" +
                 $"{_flavourText}\n");
         }
+
+        public abstract void UseItem(LivingEntity entity);
     }
 }

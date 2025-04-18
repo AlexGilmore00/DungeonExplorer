@@ -13,7 +13,7 @@ namespace DungeonExplorer
             Name = "TestEnemy";
             MaxHealth = 25;
             Health = MaxHealth;
-            CurrentAtkDmg = 10;
+            CurrentAtkDmg = 15;
             CurrentDefence = 5;
         }
     }

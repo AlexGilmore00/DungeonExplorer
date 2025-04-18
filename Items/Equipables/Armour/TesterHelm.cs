@@ -14,7 +14,7 @@ namespace DungeonExplorer
             _baseName = Name;
             Category = "Armour";
             Slot = "Head";
-            Defence = 10;
+            Defence = 5;
             _flavourText = "a helmet used for testing";
         }
     }

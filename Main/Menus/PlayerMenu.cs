@@ -90,43 +90,6 @@ namespace DungeonExplorer
             Console.WriteLine();
         }
 
-        private static void InventoryMenu(Player player)
-        // allow the player to: look at their inventory,
-        // access their inventory to equip items !!NEEDS ADDING!!
-        // sort their inventory !!NEEDS ADDING!!
-        // search their inventory for an item !!NEEDS ADDING!!LINQ!!
-        {
-            while(true)
-            {
-                Console.WriteLine("what would you like to do?\n" +
-                "[1] display full inventory\n" +
-                "[2] open inventory\n" +
-                "[r] return to previous menu\n");
-
-                // get player input
-                ConsoleKeyInfo input = Console.ReadKey(true);
-
-                switch (input.Key)
-                {
-                    case ConsoleKey.D1:
-                    case ConsoleKey.NumPad1:
-                        Console.WriteLine();
-                        player.DisplayInventoryContents();
-                        break;
-                    case ConsoleKey.D2:
-                    case ConsoleKey.NumPad2:
-                        Console.WriteLine();
-                        OpenInventory(player);
-                        break;
-                    case ConsoleKey.R:
-                        return;
-                    default:
-                        Console.WriteLine("unknown command...");
-                        break;
-                }
-            }
-        }
-
         private static void OpenInventory(Player player)
         // opens the inventory so the player can look at, use, and equip items
         // gives the player the option to choose between looking at their
@@ -216,9 +179,9 @@ namespace DungeonExplorer
             }
 
             int pageNumber = 0;
-
+            bool endSubroutine = false;
             // display pages to the user
-            while (true)
+            while (!endSubroutine)
             {
                 // set the current active page
                 ParentItem[] activePage = pages[pageNumber];
@@ -251,7 +214,8 @@ namespace DungeonExplorer
                         continue;
                     }
                     // if its a valid number, select the item
-                    SelectItem(player, activePage[numInput - 1]);
+                    endSubroutine = SelectItem(player, activePage[numInput - 1]);
+                    
                 }
                 else
                 // if the item is not a number, sheck if it is another valid char input
@@ -288,11 +252,13 @@ namespace DungeonExplorer
             }
         }
 
-        private static void SelectItem(Player player, ParentItem item)
+        private static bool SelectItem(Player player, ParentItem item)
         // menu for how you can interact with an item once selected from the inventory
         // can inspect all items
         // can equip equipables
         // can use consumables !!NEEDS ADDING!!
+        // returns true to send the player back to the OpenInventory
+        // returns false to rend the player back to PresentItemList
         {
             while (true)
             {
@@ -301,6 +267,20 @@ namespace DungeonExplorer
                 if (item is ParentEquipable)
                 {
                     Console.WriteLine("[2] equip item");
+                }
+                else if (item is ParentConsumable)
+                {
+                    Console.WriteLine("[2] use item");
+                }
+                // check if the item is equipped and gove the option to unequip if necessary
+                if (item is ParentEquipable)
+                {
+                    ParentEquipable eqItem = (ParentEquipable)item;
+                    if ((eqItem is ParentWeapon && player.EqWeapon[eqItem.Slot] == item)
+                        || (eqItem is ParentArmour && player.EqArmour[eqItem.Slot] == item))
+                    {
+                        Console.WriteLine("[3] unequip item");
+                    }
                 }
                 Console.WriteLine("[r] return to previous menu");
 
@@ -321,15 +301,41 @@ namespace DungeonExplorer
                         {
                             player.TryEquipItem((ParentEquipable)item);
                             Console.WriteLine($"{item.Name} was equipped");
-                            return;
+                            return false;
+                        }
+                        else if (item is ParentConsumable)
+                        {
+                            ParentConsumable conItem = (ParentConsumable)item;
+                            conItem.UseItem(player);
+                            player.PickUpItem(item, remove: true);
+                            return true;
                         }
                         else
                         {
                             Console.WriteLine("unknown command...");
                         }
                         break;
+                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
+                        Console.WriteLine();
+                        if (item is ParentEquipable)
+                        {
+                            ParentEquipable eqItem = (ParentEquipable)item;
+                            if ((eqItem is ParentWeapon && player.EqWeapon[eqItem.Slot] == item)
+                                || (eqItem is ParentArmour && player.EqArmour[eqItem.Slot] == item))
+                            {
+                                player.UnequipItem(eqItem.Slot);
+                            }
+                            Console.WriteLine($"you unequipped {item.Name}");
+                            return false;
+                        }
+                        else
+                        {
+                            Console.WriteLine("unknown commend...");
+                        }
+                        break;
                     case ConsoleKey.R:
-                        return;
+                        return false;
                     default:
                         Console.WriteLine("unknown command...");
                         break;

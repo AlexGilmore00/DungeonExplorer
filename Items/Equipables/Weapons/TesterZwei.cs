@@ -16,7 +16,7 @@ namespace DungeonExplorer
             _baseName = Name;
             Category = "Weapon";
             Slot = "Rhand";
-            Attack = 20;
+            Attack = 10;
             Defence = 0;
             IsTwoHanded = true;
             IsShield = false;
