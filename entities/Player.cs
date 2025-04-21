@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace DungeonExplorer
 {
-    public class Player : LivingEntity
+    public class Player : LivingEntity, IDamageable
     {
         public List<ParentWeapon> InvWeapons { get; private set; }
         public List<ParentArmour> InvArmour { get; private set; }
@@ -43,6 +43,32 @@ namespace DungeonExplorer
             CurrentAtkDmg = baseDmg;
             CurrentDefence = BaseDef;
         }
+
+        public void DealDamageTo(Player player, ParentEnemy enemy)
+        {
+            int attack = player.CurrentAtkDmg;
+            int defence = enemy.CurrentDefence;
+
+            int damage = attack - defence;
+            // dont call to deal damage if no damage is dealt
+            if (damage <= 0) { damage = 0; }
+            else
+            {
+                enemy.TakeDamage(damage);
+            }
+            Console.WriteLine($"{enemy.Name} took {damage} damage");
+        }
+
+        public void TakeDamage(int damage)
+        {
+            Health -= damage;
+            // kill the entity if their health is 0 or below
+            if (Health <= 0)
+            {
+                IsDead = true;
+            }
+        }
+
         public void PickUpItem(ParentItem item, bool remove = false)
         // takes an item as input, casts it to the relevant child class, and adds
         // it to the relevant inventory list

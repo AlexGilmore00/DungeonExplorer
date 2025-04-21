@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Enemies\AttackTypes.cs" />
+    <Compile Include="Entities\Enemies\Attack.cs" />
+    <Compile Include="Entities\IDamageable.cs" />
     <Compile Include="Main\Menus\ContainerMenu.cs" />
     <Compile Include="Main\Menus\BattleMenu.cs" />
     <Compile Include="Entities\Enemies\TestEnemy.cs" />

@@ -103,7 +103,7 @@ namespace DungeonExplorer
                 {
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
-                        player.DealDamageTo(player, enemy, true);
+                        player.DealDamageTo(player, enemy);
                         return;
                     default:
                         Console.WriteLine("unknown command...");
@@ -117,7 +117,7 @@ namespace DungeonExplorer
         // once complete this should also allow enemies to choose a random move
         // from their aresenal
         {
-            enemy.DealDamageTo(player, enemy, false);
+            enemy.DealDamageTo(player, enemy);
         }
     }
 }

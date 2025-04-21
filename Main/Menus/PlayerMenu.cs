@@ -308,6 +308,8 @@ namespace DungeonExplorer
                             ParentConsumable conItem = (ParentConsumable)item;
                             conItem.UseItem(player);
                             player.PickUpItem(item, remove: true);
+                            // must return to OpenInventory to reset the pages in
+                            // PresentItemList after an item has been removed
                             return true;
                         }
                         else

@@ -15,6 +15,11 @@ namespace DungeonExplorer
             Health = MaxHealth;
             CurrentAtkDmg = 15;
             CurrentDefence = 5;
+            Attacks = new List<Attack>()
+            {
+                AttackTypes.Slash,
+                AttackTypes.ShieldBash,
+            };
         }
     }
 }
