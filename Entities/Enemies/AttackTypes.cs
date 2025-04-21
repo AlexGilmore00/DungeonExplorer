@@ -13,6 +13,8 @@ namespace DungeonExplorer
         //
 
         public static readonly Attack Slash = new Attack("Slash", 1);
+        public static readonly Attack HeavyThrust = new Attack("Heavy Thrust", 1.8,
+            isCharge: true, chargeTurns: 1, chargeMessage: "winds back their sword arm");
 
         //
         // using shield

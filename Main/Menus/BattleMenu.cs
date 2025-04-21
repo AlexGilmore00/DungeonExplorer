@@ -118,6 +118,7 @@ namespace DungeonExplorer
         // from their aresenal
         {
             enemy.DealDamageTo(player, enemy);
+            enemy.ChooseNextAttack();
         }
     }
 }
