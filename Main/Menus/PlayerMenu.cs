@@ -86,7 +86,13 @@ namespace DungeonExplorer
                 $"legs: {legs}\n" +
                 $"feel: {feet}\n" +
                 $"right hand: {rhand}\n" +
-                $"left hand: {lhand}");
+                $"left hand: {lhand}\n" +
+                $"\n" +
+                $"STATUS EFFECTS\n");
+            foreach (var status in player.StatusEffects)
+            {
+                Console.WriteLine($"{status.Name}: {status.Duration} turns");
+            }
             Console.WriteLine();
         }
 

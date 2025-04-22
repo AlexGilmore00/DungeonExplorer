@@ -35,6 +35,10 @@ namespace DungeonExplorer
                 // deal a minimum of 1 damage
                 if (damage <= 0) { damage = 1; }
 
+                // apply any relevant status effects
+                if (enemy.NextAttack.AppliesStatus && _rnd.NextDouble() < enemy.NextAttack.StatusChance)
+                    StatusInteractions.ApplyStatusTo(player, enemy.NextAttack.Status, enemy.NextAttack.StatusDuration);
+
                 player.TakeDamage(damage);
                 Console.WriteLine($"{enemy.Name} used {enemy.NextAttack.Name}");
                 Console.WriteLine($"{player.Name} took {damage} damage");

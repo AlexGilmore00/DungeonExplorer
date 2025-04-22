@@ -19,7 +19,8 @@ namespace DungeonExplorer
             {
                 AttackTypes.Slash,
                 AttackTypes.ShieldBash,
-                AttackTypes.HeavyThrust
+                AttackTypes.HeavyThrust,
+                AttackTypes.HeavySlash
             };
             ChooseNextAttack();
         }

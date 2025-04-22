@@ -41,6 +41,7 @@ namespace DungeonExplorer
 
         public static void SetupTestInventory(Player player)
         {
+            Console.WriteLine("TEST: setting up player test inventory...");
             player.PickUpItem(new TesterHelm());
             player.PickUpItem(new TesterPotion());
             player.PickUpItem(new TesterPotion());

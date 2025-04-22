@@ -74,6 +74,9 @@
     <Compile Include="Main\Menus\RoomMoveMenu.cs" />
     <Compile Include="Items\Equipables\Weapons\TesterZwei.cs" />
     <Compile Include="Items\Equipables\Weapons\TesterShield.cs" />
+    <Compile Include="Entities\Status.cs" />
+    <Compile Include="Entities\StatusIds.cs" />
+    <Compile Include="Entities\StatusInteractions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

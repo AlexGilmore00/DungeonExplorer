@@ -76,10 +76,22 @@ namespace DungeonExplorer
         {
             while (!player.IsDead && !enemy.IsDead)
             {
+                // display info
                 Console.WriteLine($"{player.Name} has {player.Health}/{player.MaxHealth}\n" +
                     $"{enemy.Name} has {enemy.Health}/{enemy.MaxHealth} health\n");
-                BeginPlayerBattleTurn(player, enemy);
-                BeginEnemyBattleTurn(player, enemy);
+                // play turns
+                if (!player.IsStunned)
+                    BeginPlayerBattleTurn(player, enemy);
+                else
+                {
+                    Console.WriteLine("you are still stunned, press any key to continue...");
+                    Console.ReadKey(true);
+                }
+                if (!enemy.IsStunned && !enemy.IsDead)
+                    BeginEnemyBattleTurn(player, enemy);
+                // update status info
+                StatusInteractions.UpdateStatuses(player);
+                StatusInteractions.UpdateStatuses(enemy);
             }
             if (enemy.IsDead)
             {
