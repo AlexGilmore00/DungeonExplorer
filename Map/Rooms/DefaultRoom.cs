@@ -16,7 +16,7 @@ namespace DungeonExplorer
             _difficulty = difficulty;
             // set the number of containers and enemies in the room depending on difficulty
             Enemies = new ParentEnemy[rnd.Next(0, 2 + _difficulty)];
-            PopulateEnemies();
+            PopulateEnemies(_difficulty);
             Containers = new ParentContainer[rnd.Next(1, 4 -  (_difficulty / 2))];
             PopulateContainers();
             // get the flavour text description of the room, this holds no gameplay value

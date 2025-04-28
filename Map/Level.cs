@@ -36,11 +36,13 @@ namespace DungeonExplorer
             int yCoord = LevelLayout.GetLength(0) / 2;
 
             // add the rooms
-            AddRooms(xCoord, yCoord, desiredRoomCount);
+            // desired room count - 1 to account for the boss room
+            AddRooms(xCoord, yCoord, desiredRoomCount - 1);
             if (_excessRooms > 0)
             {
                 FillInExcessRooms();
             }
+            AddBossRoom();
 
             // add the flags for room connection directions in each rooms
             SetUpRoomConnections();
@@ -184,6 +186,71 @@ namespace DungeonExplorer
             }
         }
 
+        private void AddBossRoom()
+        // add a boss room to a raandom valid location
+        // cannot be adjacent to root room
+        {
+            // a list of tuples representing the coordinates of valid
+            // locations to place a room
+            // a valid location is and coordinate with at least one
+            // connecting room
+            // the tuple is structures as such:
+            // item1 = x, item2 = y
+            List<Tuple<int, int>> validSpots = new List<Tuple<int, int>>();
+
+            // check each room to see if its a valid spot and
+            // add it to the list if so
+            int levelSize = LevelLayout.GetLength(0);
+            for (int y = 0; y < levelSize; y++)
+            {
+                for (int x = 0; x < levelSize; x++)
+                {
+                    bool valid = false;
+
+                    // make sure a room isnt already there
+                    if (LevelLayout[y, x] != null)
+                    {
+                        continue;
+                    }
+
+                    // check if adjacent to root room and continue
+                    // if so
+                    int rootCoord = levelSize / 2;
+                    if (x == rootCoord + 1 && y == rootCoord
+                        || x == rootCoord - 1 && y == rootCoord
+                        || y == rootCoord + 1 && x == rootCoord
+                        || y == rootCoord - 1 && x == rootCoord)
+                    {
+                        continue;
+                    }
+
+
+                    // check for adjacent rooms
+                    if (y - 1 >= 0)
+                        if (LevelLayout[y - 1, x] != null)
+                            valid = true;
+                    if (x + 1 < levelSize)
+                        if (LevelLayout[y, x + 1] != null)
+                            valid = true;
+                    if (y + 1 < levelSize)
+                        if (LevelLayout[y + 1, x] != null)
+                            valid = true;
+                    if (x - 1 >= 0)
+                        if (LevelLayout[y, x - 1] != null)
+                            valid = true;
+
+                    // add the room to valid spots if valid
+                    if (valid)
+                        validSpots.Add(Tuple.Create(x, y));
+                }
+            }
+
+            // add the boss room
+            Tuple<int, int> coords = validSpots[_rnd.Next(0, validSpots.Count)];
+            LevelLayout[coords.Item2, coords.Item1] = new BossRoom(_difficulty);
+            _roomCount++;
+        }
+
         private void SetUpRoomConnections()
         // go through each room in _levelLayout and add all the valid connecting
         // directions to each room
@@ -198,6 +265,7 @@ namespace DungeonExplorer
                     if (LevelLayout[y, x] == null)
                         continue;
 
+                    // check for adjacent rooms
                     if (y - 1 >= 0)
                         if (LevelLayout[y - 1, x] != null)
                             LevelLayout[y, x].AddConnection('N');
@@ -210,6 +278,10 @@ namespace DungeonExplorer
                     if (x - 1 >= 0)
                         if (LevelLayout[y, x - 1] != null)
                             LevelLayout[y, x].AddConnection('W');
+
+                    // add down connection to boss rooms
+                    if (LevelLayout[y, x] is BossRoom)
+                        LevelLayout[y, x].AddConnection('D');
                 }
             }
         }

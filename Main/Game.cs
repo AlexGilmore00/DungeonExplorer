@@ -19,6 +19,8 @@ namespace DungeonExplorer
 
         public Game()
         {
+            _levelComplete = false;
+
             // setup player character
             string name;
             Console.WriteLine("what would you like to be called");
@@ -44,15 +46,15 @@ namespace DungeonExplorer
             while (playing)
             {
                 int levelCount = 3;  // number of levels to play before completing
-                this._levelComplete = false;
                 for (int level = 0; level < levelCount; level++)
                 {
                     Level currentLevel = new Level(level);
                     _currentLevel = currentLevel;
+                    _levelComplete = false;
                     while (!_levelComplete)
                     {
                         // load new room
-                        this._currentRoom = currentLevel.CurrentRoom;
+                        _currentRoom = currentLevel.CurrentRoom;
                         EnterRoomMenu(currentLevel);
                         // end the game if the player dies
                         if (_player.IsDead)
@@ -62,6 +64,10 @@ namespace DungeonExplorer
                         }
                     }
                 }
+
+                // after completing the all the levels, the game is won
+                Console.WriteLine("you have won!");
+                return;
             }
         }
 
@@ -129,8 +135,14 @@ namespace DungeonExplorer
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
                         Console.WriteLine();
-                        if (RoomMoveMenu.MoveRoom(_currentLevel, _currentRoom) == true)
+                        int retVal = RoomMoveMenu.MoveRoom(_currentLevel, _currentRoom);
+                        if (retVal == 1)
                         {
+                            return;
+                        }
+                        if (retVal == 2)
+                        {
+                            _levelComplete = true;
                             return;
                         }
                         break;

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,11 +24,61 @@ namespace DungeonExplorer
         //
         //
 
-        public static ParentEnemy GenerateRandomEnemy()
-        // not fully implemented yet but will eventually return a random enemy class
-        // taht is a child of LivingEntity
+        public static ParentEnemy GenerateRandomEnemy(int difficulty)
+        // returns a random parent enemy corresponding to the difficulty type
+        // a +10 modifier to difficulty is to be used if a boss is wanted to be returned
         {
-            return new TestEnemy();
+            // a list of the valid enemies for this difficulty
+            List<ParentEnemy> enemySet;
+
+            switch (difficulty)
+            {
+                // regular enemies
+                case 0:
+                    enemySet = new List<ParentEnemy>()
+                    {
+                        new TestEnemy()
+                    };
+                    break;
+                case 1:
+                    enemySet = new List<ParentEnemy>()
+                    {
+                        new TestEnemy()
+                    };
+                    break;
+                case 2:
+                    enemySet = new List<ParentEnemy>()
+                    {
+                        new TestEnemy()
+                    };
+                    break;
+                // bosses
+                case 10:
+                    enemySet = new List<ParentEnemy>()
+                    {
+                        new TestBoss()
+                    };
+                    break;
+                case 11:
+                    enemySet = new List<ParentEnemy>()
+                    {
+                        new TestBoss()
+                    };
+                    break;
+                case 12:
+                    enemySet = new List<ParentEnemy>()
+                    {
+                        new TestBoss()
+                    };
+                    break;
+                default:
+                    Console.WriteLine("WARNING!! an invalid difficulty was given when calling" +
+                        "Test.GenerateRandomEnemy. a default value of TestEnemy was returned");
+                    return new TestEnemy();
+            }
+
+            // return a random enemy from the list
+            return enemySet[rnd.Next(0, enemySet.Count)];
         }
 
         public static ParentContainer GenerateRandomContainer()

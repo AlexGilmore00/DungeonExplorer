@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,6 +49,9 @@ namespace DungeonExplorer
                     case 'W':
                         Console.WriteLine("W - a room to the West");
                         break;
+                    case 'D':
+                        Console.WriteLine("D - a way down?");
+                        break;
                 }
             }
 
@@ -71,12 +75,12 @@ namespace DungeonExplorer
             }
             Console.WriteLine();
         }
-        protected void PopulateEnemies()
+        protected void PopulateEnemies(int difficulty)
         // fill the rooms Enemies param with random enemy classes
         {
             for (int i = 0; i < Enemies.Length; i++)
             {
-                Enemies[i] = LookUp.GenerateRandomEnemy();
+                Enemies[i] = LookUp.GenerateRandomEnemy(difficulty);
             }
         }
 

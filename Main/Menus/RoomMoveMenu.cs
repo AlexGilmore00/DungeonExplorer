@@ -9,19 +9,22 @@ namespace DungeonExplorer
 {
     public abstract class RoomMoveMenu
     {
-        public static bool MoveRoom(Level currentLevel, ParentRoom currentRoom)
+        public static int MoveRoom(Level currentLevel, ParentRoom currentRoom)
         // entry point to Room Move Menu
         // displays which valid directions the player can move from this room and
-        // asks them to choose which one to move to. if they confirm that they do
-        // want to move, return true, if not, false.
+        // asks them to choose which one to move to. if the confirm they want to
+        // move to another room on the same level: return 1
+        // if they confirm they want to move to the next level: return 2
+        // if they dont want to move: return 0
         {
             while (true)
             {
                 DisplayLevelLayout(currentLevel, currentRoom);
                 // keep track of what player inputs should be valid
                 HashSet<int> validInputs = new HashSet<int>();
-                // keeps track pf which valid input corresponds to which direction
+                // keeps track of which valid input corresponds to which direction
                 // tuple is coords of direction relative to current room in form (x, -y)
+                // a value of (2, 0) denotes going down
                 Dictionary<int, Tuple<int, int>> inputToDirectionMap = new Dictionary<int, Tuple<int, int>>();
 
                 // display options to the player
@@ -55,6 +58,20 @@ namespace DungeonExplorer
                     inputToDirectionMap[num] = Tuple.Create(-1, 0);
                     Console.WriteLine($"[{num}] West");
                 }
+                if (currentRoom.Connections.Contains('D'))
+                {
+                    // check if the boss has been killed
+                    if (currentRoom.Enemies.Any(e => e.IsDead == false))
+                    {
+                        Console.WriteLine("[-] The way doen is currently blocked");
+                    }
+                    else
+                    {
+                        int num = AddToValidInputs(validInputs);
+                        inputToDirectionMap[num] = Tuple.Create(2, 0);
+                        Console.WriteLine($"[{num}] Down");
+                    }
+                }
                 Console.WriteLine("[r] return to the previous menu\n");
 
                 // get player input
@@ -63,7 +80,7 @@ namespace DungeonExplorer
                 // check if the input if the return character
                 if (char.ToLower(input.KeyChar) == 'r')
                 {
-                    return false;
+                    return 0;
                 }
                 // make sure the input is a number
                 if (!char.IsDigit(input.KeyChar))
@@ -78,9 +95,15 @@ namespace DungeonExplorer
                     Console.WriteLine("unknown command...");
                     continue;
                 }
-                // if input is valid, move to the next room
+                // if input is valid, carry on
+                // check to see if they want to move down
+                if (inputToDirectionMap[inputNum].Item1 == 2)
+                {
+                    return 2;
+                }
+                // if not, move room
                 currentLevel.ChangeCurrentRoom(inputToDirectionMap[inputNum].Item1, inputToDirectionMap[inputNum].Item2);
-                return true;
+                return 1;
             }
         }
 
@@ -120,6 +143,8 @@ namespace DungeonExplorer
                     string room;
                     if (levelLayout[i, j] == currentRoom)
                         room = "[ i ]";
+                    else if (levelLayout[i, j] is BossRoom)
+                        room = "[>:(]";
                     else if (levelLayout[i, j] != null)
                         room = "[   ]";
                     else

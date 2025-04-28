@@ -108,6 +108,8 @@ namespace DungeonExplorer
                     string room;
                     if (currentRoom != null && levelLayout[i, j] == currentRoom)
                         room = "[ x ]";
+                    else if (levelLayout[i, j] is BossRoom)
+                        room = "[ B ]";
                     else if (levelLayout[i, j] != null)
                         room = "[   ]";
                     else
