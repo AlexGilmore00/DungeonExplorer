@@ -12,7 +12,7 @@ namespace DungeonExplorer
 {
     public abstract class PlayerMenu
     {
-        public static void OpenPayerMenu(Player player)
+        public static void OpenPlayerMenu(Player player)
         // entry point to the player menu
         // allow the player to choose between displaying their stats
         // or manipulating their inventory
@@ -26,6 +26,7 @@ namespace DungeonExplorer
                 "[1] display player stats\n" +
                 "[2] display full inventory\n" +
                 "[3] open inventory\n" +
+                "[4] sort inventory\n" +
                 "[r] return to previous menu\n");
 
                 // get player input
@@ -46,7 +47,14 @@ namespace DungeonExplorer
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
                         Console.WriteLine();
-                        OpenInventory(player);
+                        List<ParentItem> invList = ChooseCategory(player);
+                        PresentItemList(player, invList);
+                        break;
+                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
+                        Console.WriteLine();
+                        List<ParentItem> invListSort = ChooseCategory(player);
+                        SortInventory(player, invListSort);
                         break;
                     case ConsoleKey.R:
                         return;
@@ -96,19 +104,18 @@ namespace DungeonExplorer
             Console.WriteLine();
         }
 
-        private static void OpenInventory(Player player)
-        // opens the inventory so the player can look at, use, and equip items
+        private static List<ParentItem> ChooseCategory(Player player)
         // gives the player the option to choose between looking at their
         // weapons, armour, and conumables
-        // will dispay the chosen set of items in pages of 9 items
+        // returns all the items in that section of their inventory as
+        // a list of generic ParentItem
         {
             while (true)
             {
                 Console.WriteLine("which items would you like to look at?\n" +
                 "[1] weapons\n" +
                 "[2] armour\n" +
-                "[3] consumables\n" +
-                "[r] return to previous menu\n");
+                "[3] consumables\n");
 
                 // get player input
                 ConsoleKeyInfo input = Console.ReadKey(true);
@@ -120,24 +127,19 @@ namespace DungeonExplorer
                         Console.WriteLine();
                         // convert the inventory to a list of more generic type ParentItem
                         List<ParentItem> wepsInv = player.InvWeapons.ConvertAll(x => (ParentItem)x);
-                        PresentItemList(player, wepsInv);
-                        break;
+                        return wepsInv;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
                         Console.WriteLine();
                         // convert the inventory to a list of more generic type ParentItem
                         List<ParentItem> armsInv = player.InvArmour.ConvertAll(x => (ParentItem)x);
-                        PresentItemList(player, armsInv);
-                        break;
+                        return armsInv;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
                         Console.WriteLine();
                         // convert the inventory to a list of more generic type ParentItem
                         List<ParentItem> consInv = player.InvConsumables.ConvertAll(x => (ParentItem)x); ;
-                        PresentItemList(player, consInv);
-                        break;
-                    case ConsoleKey.R:
-                        return;
+                        return consInv;
                     default:
                         Console.WriteLine("unknown command...");
                         break;
@@ -263,8 +265,8 @@ namespace DungeonExplorer
         // can inspect all items
         // can equip equipables
         // can use consumables !!NEEDS ADDING!!
-        // returns true to send the player back to the OpenInventory
-        // returns false to rend the player back to PresentItemList
+        // returns true to send the player back to the OpenPlayerMenu
+        // returns false to send the player back to PresentItemList
         {
             while (true)
             {
@@ -348,6 +350,127 @@ namespace DungeonExplorer
                         Console.WriteLine("unknown command...");
                         break;
                 }
+            }
+        }
+
+        private static void SortInventory(Player player, List<ParentItem> itemList)
+        // allows the player to sort their inventory based off differing variables
+        // all items in itemList should be of the same category
+        {
+            // if there are no items in item list, say so and return
+            if (itemList.Count <= 0)
+            {
+                Console.WriteLine("you have no items in this category\n");
+                return;
+            }
+
+
+            while (true)
+            {
+                // give different options depending on what category the items are
+                Console.WriteLine("how would you like to sort these items?\n" +
+                    "[1] name ascending\n" +
+                    "[2] name descending");
+                if (itemList[0].Category == "Weapon" || itemList[0].Category == "Armour")
+                {
+                    Console.WriteLine("[3] defence ascending\n" +
+                        "[4] defence descending");
+                }
+                if (itemList[0].Category == "Weapon")
+                {
+                    Console.WriteLine("[5] attack ascending\n" +
+                        "[6] attack descending");
+                }
+                Console.WriteLine("[r] return to previous menu\n");
+
+                // get player input
+                ConsoleKeyInfo input = Console.ReadKey(true);
+
+                // setup needed lists
+                List<ParentItem> sortedList = new List<ParentItem>();
+                List<ParentEquipable> tempEquippableList = new List<ParentEquipable>();
+                List<ParentWeapon> tempWepList = new List<ParentWeapon>();
+
+                // use player input
+                switch (input.Key)
+                {
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        itemList.Sort((a, b) => (a.Name.CompareTo(b.Name)));
+                        sortedList = itemList;
+                        break;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        itemList.Sort((a, b) => (a.Name.CompareTo(b.Name)));
+                        itemList.Reverse();
+                        sortedList = itemList;
+                        break;
+                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
+                        if (itemList[0].Category == "Weapon" || itemList[0].Category == "Armour")
+                        {
+                            tempEquippableList = itemList.ConvertAll(x => (ParentEquipable)x);
+                            sortedList = tempEquippableList.OrderBy(x => x.Defence).ToList()
+                                .ConvertAll(x => (ParentItem)x);
+                        }
+                        else
+                        {
+                            Console.WriteLine("unknown command...");
+                            continue;
+                        }
+                        break;
+                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
+                        if (itemList[0].Category == "Weapon" || itemList[0].Category == "Armour")
+                        {
+                            tempEquippableList = itemList.ConvertAll(x => (ParentEquipable)x);
+                            sortedList = tempEquippableList.OrderByDescending(x => x.Defence).ToList()
+                                .ConvertAll(x => (ParentItem)x);
+                        }
+                        else
+                        {
+                            Console.WriteLine("unknown command...");
+                            continue;
+                        }
+                        break;
+                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
+                        if (itemList[0].Category == "Weapon")
+                        {
+                            tempWepList = itemList.ConvertAll(x => (ParentWeapon)x);
+                            sortedList = tempWepList.OrderBy(x => x.Attack).ToList()
+                                .ConvertAll(x => (ParentItem)x);
+                        }
+                        else
+                        {
+                            Console.WriteLine("unknown command...");
+                            continue;
+                        }
+                        break;
+                    case ConsoleKey.D6:
+                    case ConsoleKey.NumPad6:
+                        if (itemList[0].Category == "Weapon")
+                        {
+                            tempWepList = itemList.ConvertAll(x => (ParentWeapon)x);
+                            sortedList = tempWepList.OrderByDescending(x => x.Attack).ToList()
+                                .ConvertAll(x => (ParentItem)x);
+                        }
+                        else
+                        {
+                            Console.WriteLine("unknown command...");
+                            continue;
+                        }
+                        break;
+                    case ConsoleKey.R:
+                        return;
+                    default:
+                        Console.WriteLine("unknown command...");
+                        continue;
+                }
+
+                // set the players ionventory to the sorted list
+                player.SetInventory(sortedList, sortedList[0].Category);
+                return;
             }
         }
     }

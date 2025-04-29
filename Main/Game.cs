@@ -39,6 +39,7 @@ namespace DungeonExplorer
             }
             _player = new Player(name, 100, 10, 5);
             Console.WriteLine();
+            Test.SetupTestInventory(_player);
         }
         public void Start()
         {
@@ -149,7 +150,7 @@ namespace DungeonExplorer
                     case ConsoleKey.D5:
                     case ConsoleKey.NumPad5:
                         Console.WriteLine();
-                        PlayerMenu.OpenPayerMenu(_player);
+                        PlayerMenu.OpenPlayerMenu(_player);
                         break;
                     default:
                         Console.WriteLine("unknown command...");

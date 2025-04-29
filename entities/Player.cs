@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 
 namespace DungeonExplorer
@@ -117,6 +119,62 @@ namespace DungeonExplorer
                     $"to inventory. exception: {e}\n{e.Message}");
             }
         }
+
+        public void SetInventory(List<ParentItem> itemList, string category)
+        // used to set a certain category of a players inventory to a specific state
+        // clears that section of the inventory before setting it to the inputted list
+        // itemList must be filled with items of the same category
+        // category must be either: "Weapon", "Armour", "Consumable"
+        // in accordance to the ParentItem Category setter
+        {
+            // clear the correct inventory
+            if (category == "Weapon")
+                InvWeapons.Clear();
+            else if (category == "Armour")
+                InvArmour.Clear();
+            else if (category == "Consumable")
+                InvConsumables.Clear();
+            else
+            {
+                Console.WriteLine($"WARNING!! an invalid category of {category} " +
+                    $"was given when calling Player.SetInventory");
+            }
+
+            // check if the item list is empty
+            if (itemList.Count <= 0)
+            {
+                return;
+            }
+
+            try
+            {
+                // convert the list to the correct type and set
+                // the correct inventory equal to it
+                if (category == "Weapon")
+                {
+                    InvWeapons = itemList.ConvertAll(x => (ParentWeapon)x);
+                }
+                else if (category == "Armour")
+                {
+                    InvArmour = itemList.ConvertAll(x => (ParentArmour)x);
+                }
+                else if (category == "Consumable")
+                {
+                    InvConsumables = itemList.ConvertAll(x => (ParentConsumable)x);
+                }
+            }
+            catch (InvalidCastException)
+            {
+                Console.WriteLine("WARNING!! a list of items that weere not all of the same " +
+                    "category was given to Player.SetInventory");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"WARNING!! unexpected error occured when calling Player." +
+                    $"SetInventory: {e}\n{e.Message}");
+            }
+        }
+
         public void DisplayInventoryContents()
         // prints the whole contents of the players inventoy to the console
         // items are displayed in chunks with headers depenting opn what sort of item they are
