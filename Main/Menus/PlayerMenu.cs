@@ -17,7 +17,7 @@ namespace DungeonExplorer
         // allow the player to choose between displaying their stats
         // or manipulating their inventory
         // can access inventory to equip/use items
-        // can sort inventory !!NEED ADDING!!
+        // can sort inventory
         // can search inventory !!NEEDS ADDING!!LINQ!!
         {
             while (true)
@@ -27,6 +27,7 @@ namespace DungeonExplorer
                 "[2] display full inventory\n" +
                 "[3] open inventory\n" +
                 "[4] sort inventory\n" +
+                "[5] search inventory\n" +
                 "[r] return to previous menu\n");
 
                 // get player input
@@ -55,6 +56,11 @@ namespace DungeonExplorer
                         Console.WriteLine();
                         List<ParentItem> invListSort = ChooseCategory(player);
                         SortInventory(player, invListSort);
+                        break;
+                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
+                        Console.WriteLine();
+                        SearchInventory(player);
                         break;
                     case ConsoleKey.R:
                         return;
@@ -472,6 +478,43 @@ namespace DungeonExplorer
                 player.SetInventory(sortedList, sortedList[0].Category);
                 return;
             }
+        }
+
+        private static void SearchInventory(Player player)
+        // allows the player to input a string and search their
+        // inventory for items containing that string in their name
+        // creates a list of all items containing that string and then
+        // calls PresentItemList with that list as losng as it is not
+        // empty
+        // list may contain items of multiple didfferent categories
+        {
+            // get the players full inventory
+            List<ParentItem> fullInv = player.InvWeapons.ConvertAll(x => (ParentItem)x)
+                .Concat(player.InvArmour.ConvertAll(x => (ParentItem)x))
+                .Concat(player.InvConsumables.ConvertAll(x => (ParentItem)x))
+                .ToList();
+
+            // get the string the player wants to search for
+            Console.WriteLine("enter the string you want to use to search...");
+            string input = Console.ReadLine().ToLower();
+
+            // get the item list
+            List<ParentItem> searchedList = fullInv
+                .Where(item => item.Name.ToLower().Contains(input))
+                .Select(item => item)
+                .ToList();
+            
+            // present the searched for items to the player if the list
+            // isnt empty
+            if (searchedList.Count > 0)
+            {
+                PresentItemList(player, searchedList);
+            }
+            else
+            {
+                Console.WriteLine($"no items found containing '{input}' in the name");
+            }
+
         }
     }
 }
