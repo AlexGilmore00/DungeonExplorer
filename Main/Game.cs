@@ -12,14 +12,16 @@ namespace DungeonExplorer
 {
     internal class Game
     {
-        private Player _player;
-        private ParentRoom _currentRoom;
-        private Level _currentLevel;
-        private bool _levelComplete;
+        public Player Player;
+        public ParentRoom CurrentRoom;
+        public Level CurrentLevel;
+        public bool LevelComplete;
+        private bool _testing;
 
         public Game()
         {
-            _levelComplete = false;
+            LevelComplete = false;
+            _testing = false;
 
             // setup player character
             string name;
@@ -37,10 +39,18 @@ namespace DungeonExplorer
                 }
                 else { break; }
             }
-            _player = new Player(name, 100, 10, 5);
+            Player = new Player(name, 100, 10, 5);
             Console.WriteLine();
-            Test.SetupTestInventory(_player);
         }
+
+        public Game(bool testing)
+        // overload constructor to be used when testing
+        {
+            LevelComplete = false;
+            _testing = true;
+            Player = new Player("player", 100, 10, 5);
+        }
+
         public void Start()
         {
             bool playing = true;
@@ -50,15 +60,16 @@ namespace DungeonExplorer
                 for (int level = 0; level < levelCount; level++)
                 {
                     Level currentLevel = new Level(level);
-                    _currentLevel = currentLevel;
-                    _levelComplete = false;
-                    while (!_levelComplete)
+                    CurrentLevel = currentLevel;
+                    LevelComplete = false;
+                    while (!LevelComplete)
                     {
                         // load new room
-                        _currentRoom = currentLevel.CurrentRoom;
-                        EnterRoomMenu(currentLevel);
+                        CurrentRoom = currentLevel.CurrentRoom;
+                        if (!_testing)
+                            EnterRoomMenu(currentLevel);
                         // end the game if the player dies
-                        if (_player.IsDead)
+                        if (Player.IsDead)
                         {
                             Console.WriteLine("you have died");
                             return;
@@ -79,14 +90,14 @@ namespace DungeonExplorer
         // if the player chooses to go down to the next level, levelComplete will be true and
         // this method will return to the main loop
         {
-            _currentRoom.DisplayDescription();
+            CurrentRoom.DisplayDescription();
 
             while (true)
             {
                 Console.WriteLine("what do you choose to do?\n");
                 Console.WriteLine("MENU\n" +
                     "[1] display room description again");
-                if (_currentRoom.Enemies.Length > 0)
+                if (CurrentRoom.Enemies.Length > 0)
                 {
                     Console.WriteLine("[2] fight an enemy");
                 }
@@ -94,7 +105,7 @@ namespace DungeonExplorer
                 {
                     Console.WriteLine("[-] there are no enemies to fight");
                 }
-                if (_currentRoom.Containers.Length > 0)
+                if (CurrentRoom.Containers.Length > 0)
                 {
                     Console.WriteLine("[3] loot a container");
                 }
@@ -113,44 +124,44 @@ namespace DungeonExplorer
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
                         Console.WriteLine();
-                        _currentRoom.DisplayDescription();
+                        CurrentRoom.DisplayDescription();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
                         Console.WriteLine();
-                        if (_currentRoom.Enemies.Length > 0)
+                        if (CurrentRoom.Enemies.Length > 0)
                         {
-                            BattleMenu.ChooseEnemyToFight(_player, _currentRoom);
+                            BattleMenu.ChooseEnemyToFight(Player, CurrentRoom);
                             // exit the subroutine if the player dies during the fight
-                            if (_player.IsDead) { return; }
+                            if (Player.IsDead) { return; }
                         }
                         break;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
                         Console.WriteLine();
-                        if (_currentRoom.Containers.Length > 0)
+                        if (CurrentRoom.Containers.Length > 0)
                         {
-                            ContainerMenu.ChooseContainer(_player, _currentRoom);
+                            ContainerMenu.ChooseContainer(Player, CurrentRoom);
                         }
                     break;
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
                         Console.WriteLine();
-                        int retVal = RoomMoveMenu.MoveRoom(_currentLevel, _currentRoom);
+                        int retVal = RoomMoveMenu.MoveRoom(CurrentLevel, CurrentRoom);
                         if (retVal == 1)
                         {
                             return;
                         }
                         if (retVal == 2)
                         {
-                            _levelComplete = true;
+                            LevelComplete = true;
                             return;
                         }
                         break;
                     case ConsoleKey.D5:
                     case ConsoleKey.NumPad5:
                         Console.WriteLine();
-                        PlayerMenu.OpenPlayerMenu(_player);
+                        PlayerMenu.OpenPlayerMenu(Player);
                         break;
                     default:
                         Console.WriteLine("unknown command...");

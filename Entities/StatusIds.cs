@@ -9,6 +9,7 @@ namespace DungeonExplorer
     public enum StatusIds
     {
         Stun,
-        Bleed
+        Bleed,
+        Strength
     }
 }

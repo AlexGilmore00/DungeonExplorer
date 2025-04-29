@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -32,18 +34,32 @@ namespace DungeonExplorer
                         Console.WriteLine($"{entity.Name} has been afflicted with bleed for {duration} turns");
                     }
                     break;
+                case StatusIds.Strength:
+                    if (!AlreadyApplied(entity, statusId, duration))
+                    {
+                        entity.StatusEffects.Add(new Status("Strength", (int)StatusIds.Strength, duration));
+                        Console.WriteLine($"{entity.Name} has been strengthened for {duration} turns");
+                    }
+                    break;
             }
         }
 
         private static bool AlreadyApplied(LivingEntity entity, StatusIds statusId, int duration)
         // checks if an entity has a specific status effect already applied
         // if so, return true
-        // else return false UNLESS the new duration is greaater than the old duration
+        // else return false
+        // if an incoming status has a greater duration than an already applied status
+        // refresh the duration of the old status
         {
             foreach (var status in entity.StatusEffects)
             {
-                if ((int)statusId == status.ID && duration < status.Duration)
+                if ((int)statusId == status.ID && duration <= status.Duration)
                 {
+                    return true;
+                }
+                else if ((int)statusId == status.ID && duration > status.Duration)
+                {
+                    status.Duration = duration;
                     return true;
                 }
             }
@@ -84,6 +100,18 @@ namespace DungeonExplorer
                         }
                         else
                         {
+                            removeList.Add(status);
+                        }
+                        break;
+                    case (int)StatusIds.Strength:
+                        if (status.Duration > 0 && !status.HasBeenApplied)
+                        {
+                            entity.CurrentAtkDmg += 5;
+                            status.HasBeenApplied = true;
+                        }
+                        if (status.Duration <= 0)
+                        {
+                            Console.WriteLine($"{entity.Name}'s strength has ran out");
                             removeList.Add(status);
                         }
                         break;

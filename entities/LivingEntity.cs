@@ -23,8 +23,8 @@ namespace DungeonExplorer
             }
         }
         private int _health;
-        public int CurrentAtkDmg { get; protected set; }
-        public int CurrentDefence { get; protected set; }
+        public int CurrentAtkDmg;
+        public int CurrentDefence;
         public bool IsDead { get; protected set; }
         public bool IsStunned;
         public List<Status> StatusEffects;

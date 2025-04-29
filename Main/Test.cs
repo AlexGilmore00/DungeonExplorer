@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,13 +19,51 @@ namespace DungeonExplorer
         // runs main tests on all functions to see if inputs will be ok and all errors
         // handled. output the reports of these tests into a text file!!
 
+        public static void ExecMainTests()
+        {
+            Game game = new Game(testing: true);
+
+            // map generation, inluding level, room setup, and container generation
+            Console.WriteLine("TESTING MAP GENERATION::");
+            Console.WriteLine("press any key to continu0e...");
+            Console.ReadKey(true);
+            for (int i = 0; i < 3; i++)
+            {
+                TestRoomGeneration(i);
+            }
+            Console.WriteLine("press any key to continu0e...");
+            Console.ReadKey(true);
+            TestLevelGeneration();
+            Console.WriteLine("press any key to continu0e...");
+            Console.ReadKey(true);
+            TestItemGenerationAndContainers();
+
+            // living entity functionality, including player pick up
+            // player equip and unequip, and status effects
+            Console.WriteLine("TESTING LIVING ENTITY FUNCTIONALITY::");
+            Console.WriteLine("press any key to continu0e...");
+            Console.ReadKey(true);
+            SetupTestInventory(game.Player);
+            Console.WriteLine("press any key to continu0e...");
+            Console.ReadKey(true);
+            TestEquipAndUnequip(game.Player);
+            Console.WriteLine("press any key to continu0e...");
+            Console.ReadKey(true);
+            TestStatusEffects(game.Player);
+            Console.WriteLine("press any key to continu0e...");
+            Console.ReadKey(true);
+            Console.WriteLine();
+        }
+
         public static void TestRoomGeneration(int difficulty)
         {
+            Console.WriteLine($"TEST: room generation difficulty: {difficulty}\n");
             ParentRoom room = new DefaultRoom(difficulty);
             // see if enemies are added to the Enemies array correctly
             Console.WriteLine($"there should be {room.Enemies.Length} enemies...");
             foreach (ParentEnemy enemy in room.Enemies)
             {
+                Debug.Assert(enemy != null, "WARNING!! null enemy was added when generating room");
                 Console.WriteLine(enemy.Name);
             }
 
@@ -31,17 +71,19 @@ namespace DungeonExplorer
             Console.WriteLine($"there should be {room.Containers.Length} containers...");
             foreach (ParentContainer container in room.Containers)
             {
+                Debug.Assert(container != null, "WARNING!! null container was added when generating room");
                 Console.WriteLine(container.Name);
             }
 
             // test display description method
             Console.WriteLine("\n testing Room.DisplayDescription \n");
             room.DisplayDescription();
+            Console.WriteLine("TEST: test complete, test passed if no 'WARNING!!' messages\n");
         }
 
         public static void SetupTestInventory(Player player)
         {
-            Console.WriteLine("TEST: setting up player test inventory...");
+            Console.WriteLine("TEST: setting up player test inventory...\n");
             player.PickUpItem(new TesterHelm());
             player.PickUpItem(new TesterPotion());
             player.PickUpItem(new TesterPotion());
@@ -52,10 +94,20 @@ namespace DungeonExplorer
             {
                 player.PickUpItem(new TesterSword());
             }
+            Debug.Assert(player.InvWeapons.Count == 27
+                && player.InvArmour.Count == 1
+                && player.InvConsumables.Count == 2,
+                "WARNING!! not all items were picked up properly");
+            Debug.Assert(!player.InvWeapons.Any(w => w == null)
+                && !player.InvArmour.Any(a => a == null)
+                && !player.InvConsumables.Any(c => c == null),
+                "WARNING!! null items were added to the players inventory");
+            Console.WriteLine("TEST: test complete, test passed if no 'WARNING!!' messages\n");
         }
 
         public static void TestItemGenerationAndContainers()
         {
+            Console.WriteLine("TEST: testing item and container generation\n");
             List<ParentItem> itemList = new List<ParentItem>();
 
             for (int i = 0; i < 10; i++)
@@ -76,10 +128,12 @@ namespace DungeonExplorer
                 Debug.Assert(item != null, "WARNING!! some error has occured when trying to get a random item");
                 Console.WriteLine(item.Name);
             }
+            Console.WriteLine("TEST: test complete, test passed if no 'WARNING!!' messages\n");
         }
 
         public static void TestLevelGeneration()
         {
+            Console.WriteLine("TEST: testing level generation for all difficulties\n");
             for (int difficulty = 0; difficulty < 3; difficulty++)
             {
                 for (int k = 1; k <= 10; k++)
@@ -91,8 +145,11 @@ namespace DungeonExplorer
                     int[] roomInfo = level.GetRoomCountInfo();
                     Console.WriteLine($"\nroom count = {roomInfo[0]}\n" +
                         $"excess rooms = {roomInfo[1]}");
+                    Debug.Assert(roomInfo[0] == 8 + difficulty * 4, "WARNING!! desired room count not achieved");
+                    Debug.Assert(roomInfo[1] == 0, "WARNING!! all excess room not filled in");
                 }
             }
+            Console.WriteLine("TEST: test complete, test passed if no 'WARNING!!' messages\n");
         }
 
         public static void ShowCurrentLevelLayout(Level level, ParentRoom currentRoom = null)
@@ -126,15 +183,15 @@ namespace DungeonExplorer
             }
         }
 
-        public static void TestEquipAndUnequip()
+        public static void TestEquipAndUnequip(Player player)
         {
-            Console.WriteLine("TESTING EQUIPPING AND UNEQUIPPING ITEMS");
+            Console.WriteLine("TEST: testing player equip and unequip\n");
 
-            // set up objects
+            // player base stats
             int baseDmg = 10;
             int baseDef = 5;
-            Player player = new Player("TesterMan", 100, baseDmg, baseDef);
 
+            // set up objects
             ParentWeapon sword = new TesterSword();
             ParentWeapon shield = new TesterShield();
             ParentWeapon zwei = new TesterZwei();
@@ -224,7 +281,108 @@ namespace DungeonExplorer
             Debug.Assert(eqWeps["Rhand"] == zwei && eqWeps["Lhand"] == zwei, $"WARNING!! error when handling " +
                 $"players equipped dict when overriding a left handed one hander with a two hander");
 
-            Console.WriteLine("TESTING FINISHED. if no warning pop up then all tests were successful\n");
+            Console.WriteLine("TEST: test complete, test passed if no 'WARNING!!' messages\n");
+        }
+
+        public static void TestStatusEffects(Player player)
+        {
+            Console.WriteLine("TEST: testing status effects\n");
+            // make sure player is at full health
+            player.TakeDamage(-99999);
+            int initialHealth = player.Health;
+
+            // test bleed damage
+            Console.WriteLine("testing bleed application, effect, and removal\n");
+            StatusInteractions.ApplyStatusTo(player, StatusIds.Bleed, 5);
+            Debug.Assert(player.StatusEffects.Count == 1
+                && player.StatusEffects[0].ID == (int)StatusIds.Bleed,
+                "WARNING!! bleed status not applied properly");
+            for (int i = 1; i <= 5; i++)
+            {
+                StatusInteractions.UpdateStatuses(player);
+                Debug.Assert(player.Health == initialHealth - 4 * i,
+                    "WARNING!! bleed damage is not being applied properly");
+            }
+            StatusInteractions.UpdateStatuses(player);
+            Debug.Assert(player.StatusEffects.Count == 0,
+                "WARNING!! status effect has not been removed properly");
+
+            // test strenght application
+            Console.WriteLine("testing strength application, effect, and removal\n");
+            int initialStrength = player.CurrentAtkDmg;
+            StatusInteractions.ApplyStatusTo(player, StatusIds.Strength, 3);
+            Debug.Assert(player.StatusEffects.Count == 1
+                && player.StatusEffects[0].ID == (int)StatusIds.Strength,
+                "WARNING!! strength status not applied properly");
+            for (int i = 1; i <= 3; i++)
+            {
+                StatusInteractions.UpdateStatuses(player);
+                Debug.Assert(player.CurrentAtkDmg == initialStrength + 5,
+                    $"WARNING!! strength has not been applied properly, the " +
+                    $"players CurrentAtkDmg is {player.CurrentAtkDmg} when it " +
+                    $"should be {initialStrength + 5}");
+            }
+            StatusInteractions.UpdateStatuses(player);
+            Debug.Assert(player.StatusEffects.Count == 0,
+                "WARNING!! status effect has not been removed properly");
+
+            // make sure player is at full health
+            player.TakeDamage(-99999);
+
+            // test stacking the same buff with different durations
+
+            // new effect with lower duration
+            Console.WriteLine("testing adding already applied effect with lower duration\n");
+            int initialDuration = 6;
+            int newDuration = 4;
+            // apply initial effect
+            StatusInteractions.ApplyStatusTo(player, StatusIds.Bleed, initialDuration);
+            // apply new effect
+            StatusInteractions.ApplyStatusTo(player, StatusIds.Bleed, newDuration);
+            Debug.Assert(player.StatusEffects.Count == 1
+                && player.StatusEffects[0].Duration == initialDuration,
+                "WARNING!! error when adding new similar status with lower duration");
+            // clear statuses
+            for (int i = 0; i < 10; i++)
+            {
+                StatusInteractions.UpdateStatuses(player);
+            }
+
+            // new effect with greater duration
+            Console.WriteLine("testing adding already applied effect with greater duration\n");
+            initialDuration = 4;
+            newDuration = 6;
+            // apply initial effect
+            StatusInteractions.ApplyStatusTo(player, StatusIds.Bleed, initialDuration);
+            // apply new effect
+            StatusInteractions.ApplyStatusTo(player, StatusIds.Bleed, newDuration);
+            Debug.Assert(player.StatusEffects.Count == 1
+                && player.StatusEffects[0].Duration == newDuration,
+                "WARNING!! error when adding new similar status with lower duration");
+            // clear statuses
+            for (int i = 0; i < 10; i++)
+            {
+                StatusInteractions.UpdateStatuses(player);
+            }
+
+            // new effect with same duration
+            Console.WriteLine("testing adding already applied effect with same duration\n");
+            initialDuration = 5;
+            newDuration = 5;
+            // apply initial effect
+            StatusInteractions.ApplyStatusTo(player, StatusIds.Bleed, initialDuration);
+            // apply new effect
+            StatusInteractions.ApplyStatusTo(player, StatusIds.Bleed, newDuration);
+            Debug.Assert(player.StatusEffects.Count == 1
+                && player.StatusEffects[0].Duration == newDuration,
+                "WARNING!! error when adding new similar status with lower duration");
+            // clear statuses
+            for (int i = 0; i < 10; i++)
+            {
+                StatusInteractions.UpdateStatuses(player);
+            }
+
+            Console.WriteLine("TEST: test complete, test passed if no 'WARNING!!' messages\n");
         }
     }
 }

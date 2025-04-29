@@ -10,6 +10,7 @@ namespace DungeonExplorer
     {
         static void Main(string[] args)
         {
+            Test.ExecMainTests();
             try
             {
                 Game game = new Game();
