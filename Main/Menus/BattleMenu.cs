@@ -72,7 +72,7 @@ namespace DungeonExplorer
             }
         }
 
-        private static void StartBattle(Player player, ParentEnemy enemy)
+        public static void StartBattle(Player player, ParentEnemy enemy)
         {
             while (!player.IsDead && !enemy.IsDead)
             {

@@ -9,7 +9,9 @@ namespace DungeonExplorer
 {
     public abstract class RoomMoveMenu
     {
-        public static int MoveRoom(Level currentLevel, ParentRoom currentRoom)
+        private static Random _rnd = new Random();
+
+        public static int MoveRoom(Level currentLevel, ParentRoom currentRoom, Player player)
         // entry point to Room Move Menu
         // displays which valid directions the player can move from this room and
         // asks them to choose which one to move to. if the confirm they want to
@@ -63,7 +65,7 @@ namespace DungeonExplorer
                     // check if the boss has been killed
                     if (currentRoom.Enemies.Any(e => e.IsDead == false))
                     {
-                        Console.WriteLine("[-] The way doen is currently blocked");
+                        Console.WriteLine("[-] The way down is currently blocked");
                     }
                     else
                     {
@@ -101,7 +103,27 @@ namespace DungeonExplorer
                 {
                     return 2;
                 }
-                // if not, move room
+                // if not, check if the room still contains any living enemies
+                if (currentRoom.Enemies.Any(e => e.IsDead == false))
+                {
+                    // if so, try cause an ambush and dont change room
+                    if (_rnd.NextDouble() < 0.5)
+                    {
+                        Console.WriteLine("as you try to move, you get ambushed!\n");
+                        StatusInteractions.ApplyStatusTo(player, StatusIds.Stun, 1);
+                        StatusInteractions.UpdateStatuses(player);
+                        // get a list of all the alive enemies in the room
+                        List<ParentEnemy> livingEnemies = currentRoom.Enemies
+                            .Where(e => e.IsDead == false)
+                            .Select(e => e)
+                            .ToList();
+                        // start battle with a random living enemy
+                        BattleMenu.StartBattle(player, livingEnemies[_rnd.Next(0, livingEnemies.Count)]);
+                        // return 0, signifying no room change
+                        return 0;
+                    }
+                }
+                // if not, change rooms
                 currentLevel.ChangeCurrentRoom(inputToDirectionMap[inputNum].Item1, inputToDirectionMap[inputNum].Item2);
                 return 1;
             }

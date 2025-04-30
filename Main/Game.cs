@@ -40,7 +40,6 @@ namespace DungeonExplorer
                 else { break; }
             }
             Player = new Player(name, 100, 5, 0);
-            Test.SetupTestInventory(Player);
             Console.WriteLine();
         }
 
@@ -148,7 +147,7 @@ namespace DungeonExplorer
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
                         Console.WriteLine();
-                        int retVal = RoomMoveMenu.MoveRoom(CurrentLevel, CurrentRoom);
+                        int retVal = RoomMoveMenu.MoveRoom(CurrentLevel, CurrentRoom, Player);
                         if (retVal == 1)
                         {
                             return;

@@ -10,7 +10,7 @@ namespace DungeonExplorer
     {
         public LargeWoodenLid()
         {
-            Name = "TesterShield";
+            Name = "Large Wooden Lid";
             _baseName = Name;
             Category = "Weapon";
             Slot = "Lhand";
