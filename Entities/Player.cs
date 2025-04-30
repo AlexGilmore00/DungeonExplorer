@@ -219,7 +219,7 @@ namespace DungeonExplorer
                         if (wepItem.IsTwoHanded && EqWeapon["Lhand"] != null)
                         {
                             Console.WriteLine($"this weapon requires two hands to wield and so equipping it will " +
-                                $"unequip the {EqWeapon["Lhand"].Name} in your left hand");
+                                $"unequip the {EqWeapon["Lhand"].Name} in your left hand\n");
                             // !!ADD FUNCTIONALITY FOR A CONFIRM FOR THIS OPTION!!
                             UnequipItem("Lhand");
                         }
@@ -230,7 +230,7 @@ namespace DungeonExplorer
                             if (wepItem.Slot == "Lhand" && EqWeapon["Lhand"].IsTwoHanded)
                             {
                                 Console.WriteLine($"equipping this weapon in your left hand will uneqiup your " +
-                                    $"{EqWeapon["Lhand"].Name} as this weapon required two hands to wield");
+                                    $"{EqWeapon["Lhand"].Name} as this weapon required two hands to wield\n");
                                 // !!ADD FUNCTIONALITY FOR A CONFIRM FOR THIS OPTION!!
                                 UnequipItem("Lhand");
                             }
