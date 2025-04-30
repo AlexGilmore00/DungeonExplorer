@@ -44,7 +44,7 @@ namespace DungeonExplorer
                 case StatusIds.Poison:
                     if (!AlreadyApplied(entity, statusId, duration))
                     {
-                        entity.StatusEffects.Add(new Status("Poison", (int)StatusIds.Strength, duration));
+                        entity.StatusEffects.Add(new Status("Poison", (int)StatusIds.Poison, duration));
                         Console.WriteLine($"{entity.Name} has been afflicted with poison for {duration} turns");
                     }
                     break;

@@ -117,6 +117,7 @@ namespace DungeonExplorer
                 {
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
+                        Console.WriteLine();
                         player.DealDamageTo(player, enemy);
                         return;
                     case ConsoleKey.D2:
