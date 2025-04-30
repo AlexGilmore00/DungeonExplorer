@@ -107,7 +107,8 @@ namespace DungeonExplorer
             {
                 Console.WriteLine("what action would you like to take?\n" +
                     "[1] attack enemy\n" +
-                    "[2] open player menu");
+                    "[2] open player menu\n" +
+                    "[3] inspect enemy");
 
                 ConsoleKeyInfo input = Console.ReadKey(true);
 
@@ -122,6 +123,11 @@ namespace DungeonExplorer
                     case ConsoleKey.NumPad2:
                         Console.WriteLine();
                         PlayerMenu.OpenPlayerMenu(player);
+                        break;
+                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
+                        Console.WriteLine();
+                        enemy.DisplayEntityDescription();
                         break;
                     default:
                         Console.WriteLine("unknown command...");

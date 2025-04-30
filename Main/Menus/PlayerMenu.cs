@@ -38,7 +38,7 @@ namespace DungeonExplorer
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
                         Console.WriteLine();
-                        DisplayPlayerStats(player);
+                        player.DisplayEntityDescription();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
@@ -69,50 +69,6 @@ namespace DungeonExplorer
                         break;
                 }
             }
-        }
-
-        private static void DisplayPlayerStats(Player player)
-        // display the players stats
-        {
-            // set up the players equipped items
-            string head;
-            if (player.EqArmour["Head"] != null) { head = player.EqArmour["Head"].Name;  } else { head = "nothing"; }
-            string chest;
-            if (player.EqArmour["Chest"] != null) { chest = player.EqArmour["Chest"].Name; } else { chest = "nothing"; }
-            string legs;
-            if (player.EqArmour["Legs"] != null) { legs = player.EqArmour["Legs"].Name; } else { legs = "nothing"; }
-            string feet;
-            if (player.EqArmour["Feet"] != null) { feet = player.EqArmour["Feet"].Name; } else { feet = "nothing"; }
-            string rhand;
-            if (player.EqWeapon["Rhand"] != null) { rhand = player.EqWeapon["Rhand"].Name; } else { rhand = "nothing"; }
-            string lhand;
-            if (player.EqWeapon["Lhand"] != null) { lhand = player.EqWeapon["Lhand"].Name; } else { lhand = "nothing"; }
-
-            // get damage reduction
-            double DamageReduction = (double)player.CurrentDefence / ((double)player.CurrentDefence + 50);
-            DamageReduction *= 100;
-            DamageReduction = Math.Round(DamageReduction, 1);
-
-            Console.WriteLine($"name: {player.Name}\n" +
-                $"health: {player.Health}/{player.MaxHealth}\n" +
-                $"Current Damage: {player.CurrentAtkDmg}\n" +
-                $"Current Defence: {player.CurrentDefence}\n" +
-                $"Current Damage Reduction: {DamageReduction}%" +
-                $"\n" +
-                $"EQUIPPED ITEMS\n" +
-                $"head: {head}\n" +
-                $"chest: {chest}\n" +
-                $"legs: {legs}\n" +
-                $"feel: {feet}\n" +
-                $"right hand: {rhand}\n" +
-                $"left hand: {lhand}\n" +
-                $"\n" +
-                $"STATUS EFFECTS\n");
-            foreach (var status in player.StatusEffects)
-            {
-                Console.WriteLine($"{status.Name}: {status.Duration} turns");
-            }
-            Console.WriteLine();
         }
 
         private static List<ParentItem> ChooseCategory(Player player)
