@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    public abstract class ParentArmour : ParentEquipable, INeedsDescription
+    public abstract class ParentArmour : ParentEquipable
     {
         public ParentArmour() { }
 
-        public void DisplayDescription()
+        public override void DisplayDescription()
         {
             Console.WriteLine($"{Name}:\n" +
                 $"Defence: {Defence}\n" +

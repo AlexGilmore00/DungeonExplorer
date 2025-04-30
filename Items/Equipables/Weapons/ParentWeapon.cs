@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    public abstract class ParentWeapon : ParentEquipable, INeedsDescription
+    public abstract class ParentWeapon : ParentEquipable
     {
         public int Attack { get; protected set; }
         // NOTE: two handed weapons should always be given the slot "Rhand"
@@ -14,7 +14,7 @@ namespace DungeonExplorer
         public bool IsShield;
         public ParentWeapon() { }
 
-        public void DisplayDescription()
+        public override void DisplayDescription()
         {
             Console.WriteLine($"{Name}:\n" +
                 $"Attack: {Attack}\n" +
