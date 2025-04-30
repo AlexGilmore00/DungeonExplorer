@@ -43,6 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Map\Containers\InfectedPile.cs" />
+    <Compile Include="Map\Containers\LeftoverPouch.cs" />
+    <Compile Include="Map\Containers\DeceasedBody.cs" />
+    <Compile Include="Map\Containers\HiddenStash.cs" />
+    <Compile Include="Map\Containers\Cabinet.cs" />
     <Compile Include="Items\Consumables\GreaterHealingPotion.cs" />
     <Compile Include="Items\Consumables\HealingPotion.cs" />
     <Compile Include="Items\Equipables\Armour\Chest\ChainmailVest.cs" />
@@ -115,6 +120,7 @@
     <Compile Include="Items\Equipables\Armour\Head\StrawHat.cs" />
     <Compile Include="Items\Equipables\Armour\Feet\SturdyBoots.cs" />
     <Compile Include="Items\Consumables\StrengthPotion.cs" />
+    <Compile Include="Map\Containers\Table.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

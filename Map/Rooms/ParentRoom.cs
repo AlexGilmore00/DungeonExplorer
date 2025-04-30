@@ -84,12 +84,12 @@ namespace DungeonExplorer
             }
         }
 
-        protected void PopulateContainers()
+        protected void PopulateContainers(int difficulty)
         // fill the rooms Containers param with random containers
         {
             for (int i = 0; i < Containers.Length; i++)
             {
-                Containers[i] = LookUp.GenerateRandomContainer();
+                Containers[i] = LookUp.GenerateRandomContainer(difficulty);
             }
         }
 

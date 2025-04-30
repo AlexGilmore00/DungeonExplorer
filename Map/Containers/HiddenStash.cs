@@ -1,5 +1,4 @@
-﻿using DungeonExplorer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    internal class TestContainer : ParentContainer
+    public class HiddenStash : ParentContainer
     {
-        public TestContainer()
+        public HiddenStash()
         {
-            Name = "Test Conatainer";
+            Name = "Hidden Stash";
             // set up the number of items in the container
             Items = new List<ParentItem>();
-            PopulateItems(Rnd.Next(1, 4), -1);
+            PopulateItems(Rnd.Next(1, 3), 4);
         }
     }
 }
