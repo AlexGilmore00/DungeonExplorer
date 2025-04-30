@@ -23,60 +23,67 @@ namespace DungeonExplorer
             }
         }
         private int _health;
-        public int CurrentAtkDmg { get; protected set; }
-        public int CurrentDefence { get; protected set; }
-
-        public bool IsDead {  get; protected set; }
+        public int CurrentAtkDmg;
+        public int CurrentDefence;
+        public bool IsDead { get; protected set; }
+        public bool IsStunned;
+        public List<Status> StatusEffects;
 
         public LivingEntity()
         {
             IsDead = false;
+            StatusEffects = new List<Status>();
         }
 
-        public void DealDamageTo (Player player, ParentEnemy enemy, bool playerAttackEnemy)
-        // if playerAttackEnemy is true:
-        //     the player damages the enemy
-        // if playerAttackEnemy is false:
-        //     the enemy deals damage to the player
+        public void UpdateStatuses()
+        // goes through all the enitties status effects and applies their
+        // relevant condidions
+        // removes the status effect from the list once its duration reaches zero
         {
-            if (playerAttackEnemy)
-            {
-                int attack = player.CurrentAtkDmg;
-                int defence = enemy.CurrentDefence;
+            // keep track of which statuses need to be removed
+            List<Status> removeList = new List<Status>();
 
-                int damage = attack - defence;
-                // dont call to deal damage if no damage is dealt
-                if (damage <= 0) { damage = 0; }
-                else
+            // apply status effects
+            foreach (var status in StatusEffects)
+            {
+                switch (status.ID)
                 {
-                    enemy.TakeDamage(damage);
+                    case (int)StatusIds.Stun:
+                        if (status.Duration > 0)
+                        {
+                            IsStunned = true;
+                        }
+                        else
+                        {
+                            IsStunned = false;
+                            removeList.Add(status);
+                        }
+                        break;
+                    case (int)StatusIds.Bleed:
+                        if (status.Duration > 0)
+                        {
+                            Console.WriteLine($"{Name} took {status.Strength} damage" +
+                                $"from bleeding");
+                            Health -= status.Strength;
+                        }
+                        else
+                        {
+                            removeList.Add(status);
+                        }
+                        break;
+                    default:
+                        Console.WriteLine($"WARNING!!a status {status.Name} with an invalid " +
+                            $"status id {status.ID} has been given to {Name}");
+                        break;
                 }
-                Console.WriteLine($"{enemy.Name} took {damage} damage");
-            }
-            else
-            {
-                int attack = enemy.CurrentAtkDmg;
-                int defence = player.CurrentDefence;
 
-                int damage = attack - defence;
-                // dont call to deal damage if no damage is dealt
-                if (damage <= 0) { damage = 0; }
-                else
-                {
-                    player.TakeDamage(damage);
-                }
-                Console.WriteLine($"{player.Name} took {damage} damage");
+                status.Duration--;
             }
-        }
 
-        public void TakeDamage(int damage)
-        {
-            Health -= damage;
-            // kill the entity if their health is 0 or below
-            if (Health <= 0)
+            // remove any nrcessary statuses
+            foreach (var status in removeList)
             {
-                IsDead = true;
-                Name += " (Dead)";
+                StatusEffects.Remove(status);
             }
         }
     }

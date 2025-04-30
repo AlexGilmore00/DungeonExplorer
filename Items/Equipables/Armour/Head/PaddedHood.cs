@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    public class TesterHelm : ParentArmour
+    public class PaddedHood : ParentArmour
     {
-        public TesterHelm()
+        public PaddedHood()
         {
-            Name = "TesterHelm";
+            Name = "Padded Hood";
+            _baseName = Name;
             Category = "Armour";
             Slot = "Head";
             Defence = 10;
+            _flavourText = "a padded hood great for protecting your head";
         }
     }
 }

@@ -14,7 +14,7 @@ namespace DungeonExplorer
             Name = "Test Conatainer";
             // set up the number of items in the container
             Items = new List<ParentItem>();
-            PopulateItems(Rnd.Next(1, 4), - 1);
+            PopulateItems(Rnd.Next(1, 4), -1);
         }
     }
 }

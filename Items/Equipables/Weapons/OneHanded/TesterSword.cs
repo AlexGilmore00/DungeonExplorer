@@ -11,9 +11,14 @@ namespace DungeonExplorer
         public TesterSword()
         {
             Name = "TesterSword";
+            _baseName = Name;
             Category = "Weapon";
             Slot = "Rhand";
-            Attack = 10;
+            Attack = 6;
+            Defence = 0;
+            IsTwoHanded = false;
+            IsShield = false;
+            _flavourText = "a sword used for testing";
         }
     }
 }

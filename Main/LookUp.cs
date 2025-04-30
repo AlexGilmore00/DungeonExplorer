@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,18 +24,107 @@ namespace DungeonExplorer
         //
         //
 
-        public static ParentEnemy GenerateRandomEnemy()
-        // not fully implemented yet but will eventually return a random enemy class
-        // taht is a child of LivingEntity
+        public static ParentEnemy GenerateRandomEnemy(int difficulty)
+        // returns a random parent enemy corresponding to the difficulty type
+        // a +10 modifier to difficulty is to be used if a boss is wanted to be returned
         {
-            return new TestEnemy();
+            // a list of the valid enemies for this difficulty
+            List<ParentEnemy> enemySet;
+
+            switch (difficulty)
+            {
+                // regular enemies
+                case 0:
+                    enemySet = new List<ParentEnemy>()
+                    {
+                        new BowSkeleton(),
+                        new ShieldSkeleton(),
+                        new SwordSkeleton(),
+                    };
+                    break;
+                case 1:
+                    enemySet = new List<ParentEnemy>()
+                    {
+                        new GrassSlime(),
+                        new LivingMushroom(),
+                        new TreeEnt(),
+                    };
+                    break;
+                case 2:
+                    enemySet = new List<ParentEnemy>()
+                    {
+                        new Abomination(),
+                        new HardenedInfected(),
+                        new Mumbler(),
+                    };
+                    break;
+                // bosses
+                case 10:
+                    enemySet = new List<ParentEnemy>()
+                    {
+                        new FusedSkeletonPhalanx(),
+                    };
+                    break;
+                case 11:
+                    enemySet = new List<ParentEnemy>()
+                    {
+                        new GiantGiardDog(),
+                    };
+                    break;
+                case 12:
+                    enemySet = new List<ParentEnemy>()
+                    {
+                        new TheHeart(),
+                    };
+                    break;
+                default:
+                    Console.WriteLine("WARNING!! an invalid difficulty was given when calling" +
+                        "Test.GenerateRandomEnemy. a default value of TestEnemy was returned");
+                    return new TestEnemy();
+            }
+
+            // return a random enemy from the list
+            return enemySet[rnd.Next(0, enemySet.Count)];
         }
 
-        public static ParentContainer GenerateRandomContainer()
-        // not fully implemented yet but will eventually return a random container class
-        // taht is a child of ParentContainer
+        public static ParentContainer GenerateRandomContainer(int difficulty)
+        // returns a random container depending on the difficulty
         {
-            return new TestContainer();
+            // a list of valid containers fir this difficulty
+            List<ParentContainer> containers;
+
+            switch (difficulty)
+            {
+                case 0:
+                    containers = new List<ParentContainer>()
+                    {
+                        new Cabinet(),
+                        new Table(),
+                    };
+                break;
+                case 1:
+                    containers = new List<ParentContainer>()
+                    {
+                        new DeceasedBody(),
+                        new HiddenStash(),
+                    };
+                    break;
+                case 2:
+                    containers = new List<ParentContainer>()
+                    {
+                        new InfectedPile(),
+                        new LeftoverPouch(),
+                    };
+                    break;
+                default:
+                    Console.WriteLine("WARNING!! an invalid difficulty was given when " +
+                        "calling TEST.GenerateRandomContainer. a default container " +
+                        "TestContainer was returned");
+                    return new TestContainer();
+            }
+
+            // return a random container from the list
+            return containers[rnd.Next(0, containers.Count)];
         }
 
         public static string GetRandomFlavourText(int difficulty)
@@ -51,19 +141,31 @@ namespace DungeonExplorer
             {
                 "the walls are cold and damp, the cracks in the stone brick let a light breeze through. " +
                 "you cant tell whether the sounds you hear are feint screams or wind rushing through " +
-                "distant halls."
+                "distant halls.",
+
+                "water runs down the stone walls. it seems to be seeping through small cracks in the " +
+                "floor. you can only wonder whats below here."
             });
 
             // level two
             descriptions.Add(new List<string>
             {
-                "placeholder lvl 2"
+                "the floor seems to be covered in some sort of moss, it almost feels like theres nothing " +
+                "but earth beneath it. thick vines crawl up the wall and the occasional drop of water " +
+                "drops from the ceiling. the water from above must have lead to all this growth.",
+
+                "the walls seem to be almost entirely made of wood. not clean cut wood, but living " +
+                "wood, as if its still part of a tree. small branches extend off it with leaves. " +
+                "you wonder how it survives down here with no sunlight."
             });
 
             // level three
             descriptions.Add(new List<string>
             {
-                "placeholder lvl 3"
+                "the vines on the wall are thick. as you look at them, you notice they are almost " +
+                "pulsing, like some sort or artery. the thick layer moss beneath your feet " +
+                "rhythmically raises and falls like its breathing. just being here makes you " +
+                "feel uneasy. you want to leave as soon as possible"
             });
 
             return descriptions[difficulty][rnd.Next(0, descriptions[difficulty].Count)];
@@ -78,29 +180,96 @@ namespace DungeonExplorer
         public static ParentItem GenerateRandomItem(int lootTable)
         // returns a random item of type ParentItem from a pool of items determined by the lootTable arg
         {
+            // get a list of calid items for the loot table
+            List<ParentItem> items;
+
             switch (lootTable)
             {
                 // test container loot table
                 case -1:
-                    int itemNum = rnd.Next(0, 3);  //!remember to update random number bounds when adding new items!
-
-                    switch (itemNum)
+                    items = new List<ParentItem>()
                     {
-                        case 0:
-                            return new TesterHelm();
-                        case 1:
-                            return new TesterSword();
-                        case 2:
-                            return new TesterPotion();
-                        default:
-                            Console.WriteLine("WARNING!! random range too large for test container loot table.");
-                            return null;
-                    }
+                        new TesterHelm(),
+                        new TesterPotion(),
+                        new TesterShield(),
+                        new TesterSword(),
+                        new TesterZwei(),
+                    };
+                    break;
+                // cabinet loot table
+                case 1:
+                    items = new List<ParentItem>()
+                    {
+                        new StrawHat(),
+                        new ParingKnife(),
+                        new LargeWoodenLid(),
+                        new HealingPotion(),
+                    };
+                    break;
+                // table loot table
+                case 2:
+                    items = new List<ParentItem>()
+                    {
+                        new LightGambeson(),
+                        new LeatherShoes(),
+                        new ClothTrousers(),
+                        new RustedSheers(),
+                        new HealingPotion()
+                    };
+                    break;
+                // deceased body loot table
+                case 3:
+                    items = new List<ParentItem>()
+                    {
+                        new ChainmailVest(),
+                        new SturdyBoots(),
+                        new LeatherChausses(),
+                        new Mace(),
+                        new Buckler(),
+                        new HealingPotion(),
+                        new StrengthPotion(),
+                    };
+                    break;
+                // hidden stash loot table
+                case 4:
+                    items = new List<ParentItem>()
+                    {
+                        new PaddedHood(),
+                        new Longbow(),
+                        new HealingPotion(),
+                        new StrengthPotion(),
+                    };
+                    break;
+                // leftover pouch loot table
+                case 5:
+                    items = new List<ParentItem>()
+                    {
+                        new GreaterHealingPotion(),
+                        new StrengthPotion(),
+                    };
+                    break;
+                // infected pile loopt table
+                case 6:
+                    items = new List<ParentItem>()
+                    {
+                        new PlateCuirass(),
+                        new PlateBoots(),
+                        new PlateHelm(),
+                        new PlateLegs(),
+                        new Warpick(),
+                        new Claymore(),
+                        new KiteShield(),
+                    };
+                    break;
                 default:
                     Console.WriteLine("WARNING!! invalid loot table input has been given when" +
-                        " calling LookUp.GetRandomItem()");
-                    return null;
+                        " calling LookUp.GetRandomItem(). a defualt item of TestSword has " +
+                        "been returned");
+                    return new TesterSword();
             }
+
+            // return an item form the list
+            return items[rnd.Next(0, items.Count)];
         }
     }
 }
