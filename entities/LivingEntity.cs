@@ -34,57 +34,5 @@ namespace DungeonExplorer
             IsDead = false;
             StatusEffects = new List<Status>();
         }
-
-        public void UpdateStatuses()
-        // goes through all the enitties status effects and applies their
-        // relevant condidions
-        // removes the status effect from the list once its duration reaches zero
-        {
-            // keep track of which statuses need to be removed
-            List<Status> removeList = new List<Status>();
-
-            // apply status effects
-            foreach (var status in StatusEffects)
-            {
-                switch (status.ID)
-                {
-                    case (int)StatusIds.Stun:
-                        if (status.Duration > 0)
-                        {
-                            IsStunned = true;
-                        }
-                        else
-                        {
-                            IsStunned = false;
-                            removeList.Add(status);
-                        }
-                        break;
-                    case (int)StatusIds.Bleed:
-                        if (status.Duration > 0)
-                        {
-                            Console.WriteLine($"{Name} took {status.Strength} damage" +
-                                $"from bleeding");
-                            Health -= status.Strength;
-                        }
-                        else
-                        {
-                            removeList.Add(status);
-                        }
-                        break;
-                    default:
-                        Console.WriteLine($"WARNING!!a status {status.Name} with an invalid " +
-                            $"status id {status.ID} has been given to {Name}");
-                        break;
-                }
-
-                status.Duration--;
-            }
-
-            // remove any nrcessary statuses
-            foreach (var status in removeList)
-            {
-                StatusEffects.Remove(status);
-            }
-        }
     }
 }

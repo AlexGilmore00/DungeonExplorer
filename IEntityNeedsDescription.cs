@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    internal interface INeedsDescription
+    internal interface IEntityNeedsDescription
     {
-        void DisplayDescription();
+        void DisplayEntityDescription();
     }
 }

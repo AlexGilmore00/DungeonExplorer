@@ -38,7 +38,7 @@ namespace DungeonExplorer
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
                         Console.WriteLine();
-                        DisplayPlayerStats(player);
+                        player.DisplayEntityDescription();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
@@ -69,50 +69,6 @@ namespace DungeonExplorer
                         break;
                 }
             }
-        }
-
-        private static void DisplayPlayerStats(Player player)
-        // display the players stats
-        {
-            // set up the players equipped items
-            string head;
-            if (player.EqArmour["Head"] != null) { head = player.EqArmour["Head"].Name;  } else { head = "nothing"; }
-            string chest;
-            if (player.EqArmour["Chest"] != null) { chest = player.EqArmour["Chest"].Name; } else { chest = "nothing"; }
-            string legs;
-            if (player.EqArmour["Legs"] != null) { legs = player.EqArmour["Legs"].Name; } else { legs = "nothing"; }
-            string feet;
-            if (player.EqArmour["Feet"] != null) { feet = player.EqArmour["Feet"].Name; } else { feet = "nothing"; }
-            string rhand;
-            if (player.EqWeapon["Rhand"] != null) { rhand = player.EqWeapon["Rhand"].Name; } else { rhand = "nothing"; }
-            string lhand;
-            if (player.EqWeapon["Lhand"] != null) { lhand = player.EqWeapon["Lhand"].Name; } else { lhand = "nothing"; }
-
-            // get damage reduction
-            double DamageReduction = (double)player.CurrentDefence / ((double)player.CurrentDefence + 50);
-            DamageReduction *= 100;
-            DamageReduction = Math.Round(DamageReduction, 1);
-
-            Console.WriteLine($"name: {player.Name}\n" +
-                $"health: {player.Health}/{player.MaxHealth}\n" +
-                $"Current Damage: {player.CurrentAtkDmg}\n" +
-                $"Current Defence: {player.CurrentDefence}\n" +
-                $"Current Damage Reduction: {DamageReduction}%" +
-                $"\n" +
-                $"EQUIPPED ITEMS\n" +
-                $"head: {head}\n" +
-                $"chest: {chest}\n" +
-                $"legs: {legs}\n" +
-                $"feel: {feet}\n" +
-                $"right hand: {rhand}\n" +
-                $"left hand: {lhand}\n" +
-                $"\n" +
-                $"STATUS EFFECTS\n");
-            foreach (var status in player.StatusEffects)
-            {
-                Console.WriteLine($"{status.Name}: {status.Duration} turns");
-            }
-            Console.WriteLine();
         }
 
         private static List<ParentItem> ChooseCategory(Player player)
@@ -500,14 +456,75 @@ namespace DungeonExplorer
                 .ToList();
 
             // get the string the player wants to search for
-            Console.WriteLine("enter the string you want to use to search...");
+            Console.WriteLine("(special options:\n" +
+                "'--oh' finds all one handed weapons\n" +
+                "'--th' finds all two handed weapons\n" +
+                "'--sh' finds all shields)\n" +
+                "enter the string you want to use to search...");
             string input = Console.ReadLine().ToLower();
 
             // get the item list
-            List<ParentItem> searchedList = fullInv
+            List<ParentItem> searchedList;
+            List<ParentWeapon> TempWepList;
+            if (input == "--oh")
+            {
+                // get all weapons
+                searchedList = fullInv
+                .Where(item => item is ParentWeapon)
+                .Select(item => item)
+                .ToList();
+
+                // convert to Parent weapon
+                TempWepList = searchedList.ConvertAll(x => (ParentWeapon)x);
+
+                // get the one handers
+                searchedList = TempWepList
+                    .Where(item => item.IsTwoHanded == false)
+                    .Select(item => (ParentItem)item)
+                    .ToList();
+            }
+            else if (input == "--th")
+            {
+                // get all weapons
+                searchedList = fullInv
+                .Where(item => item is ParentWeapon)
+                .Select(item => item)
+                .ToList();
+
+                // convert to Parent weapon
+                TempWepList = searchedList.ConvertAll(x => (ParentWeapon)x);
+
+                // get the two handers
+                searchedList = TempWepList
+                    .Where(item => item.IsTwoHanded == true)
+                    .Select(item => (ParentItem)item)
+                    .ToList();
+            }
+            else if (input == "--sh")
+            {
+                // get all weapons
+                searchedList = fullInv
+                .Where(item => item is ParentWeapon)
+                .Select(item => item)
+                .ToList();
+
+                // convert to Parent weapon
+                TempWepList = searchedList.ConvertAll(x => (ParentWeapon)x);
+
+                // get the two handers
+                searchedList = TempWepList
+                    .Where(item => item.IsShield == true)
+                    .Select(item => (ParentItem)item)
+                    .ToList();
+            }
+            else
+            {
+                // if no special input used, search regularly
+                searchedList = fullInv
                 .Where(item => item.Name.ToLower().Contains(input))
                 .Select(item => item)
                 .ToList();
+            }
             
             // present the searched for items to the player if the list
             // isnt empty

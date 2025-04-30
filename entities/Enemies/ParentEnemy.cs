@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    public abstract class ParentEnemy : LivingEntity, IDamageable
+    public abstract class ParentEnemy : LivingEntity, IDamageable, IEntityNeedsDescription
     // a class for all enemy types to inherit from
     // all public functions and fields of an enemy should be implemented in here
     {
@@ -62,6 +62,26 @@ namespace DungeonExplorer
                 IsDead = true;
                 Name += " (Dead)";
             }
+        }
+
+        public void DisplayEntityDescription()
+        // display a brief overview of the creatures name and its damage range
+        {
+            // get the damage values of all the enemy's attacks
+            List<int> damages = new List<int>();
+            foreach (Attack attack in Attacks)
+            {
+                double damageDecimal = (double)CurrentAtkDmg * attack.DmgMod;
+                int damage = (int)damageDecimal;
+                damages.Add(damage);
+            }
+            // order the list from lowest damage to highest
+            damages = damages.OrderBy(x => x).ToList();
+
+            Console.WriteLine($"{Name}\n" +
+                $"damage range: {damages[0]} - {damages[damages.Count - 1]}");
+
+            Console.WriteLine();
         }
 
         public void ChooseNextAttack()

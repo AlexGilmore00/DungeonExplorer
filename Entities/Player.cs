@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace DungeonExplorer
 {
-    public class Player : LivingEntity, IDamageable
+    public class Player : LivingEntity, IDamageable, IEntityNeedsDescription
     {
         public List<ParentWeapon> InvWeapons { get; private set; }
         public List<ParentArmour> InvArmour { get; private set; }
@@ -70,6 +70,50 @@ namespace DungeonExplorer
             {
                 IsDead = true;
             }
+        }
+
+        public void DisplayEntityDescription()
+        // display player stats
+        {
+            // set up the players equipped items
+            string head;
+            if (EqArmour["Head"] != null) { head = EqArmour["Head"].Name; } else { head = "nothing"; }
+            string chest;
+            if (EqArmour["Chest"] != null) { chest = EqArmour["Chest"].Name; } else { chest = "nothing"; }
+            string legs;
+            if (EqArmour["Legs"] != null) { legs = EqArmour["Legs"].Name; } else { legs = "nothing"; }
+            string feet;
+            if (EqArmour["Feet"] != null) { feet = EqArmour["Feet"].Name; } else { feet = "nothing"; }
+            string rhand;
+            if (EqWeapon["Rhand"] != null) { rhand = EqWeapon["Rhand"].Name; } else { rhand = "nothing"; }
+            string lhand;
+            if (EqWeapon["Lhand"] != null) { lhand = EqWeapon["Lhand"].Name; } else { lhand = "nothing"; }
+
+            // get damage reduction
+            double DamageReduction = (double)CurrentDefence / ((double)CurrentDefence + 50);
+            DamageReduction *= 100;
+            DamageReduction = Math.Round(DamageReduction, 1);
+
+            Console.WriteLine($"name: {Name}\n" +
+                $"health: {Health}/{MaxHealth}\n" +
+                $"Current Damage: {CurrentAtkDmg}\n" +
+                $"Current Defence: {CurrentDefence}\n" +
+                $"Current Damage Reduction: {DamageReduction}%" +
+                $"\n" +
+                $"EQUIPPED ITEMS\n" +
+                $"head: {head}\n" +
+                $"chest: {chest}\n" +
+                $"legs: {legs}\n" +
+                $"feel: {feet}\n" +
+                $"right hand: {rhand}\n" +
+                $"left hand: {lhand}\n" +
+                $"\n" +
+                $"STATUS EFFECTS\n");
+            foreach (var status in StatusEffects)
+            {
+                Console.WriteLine($"{status.Name}: {status.Duration} turns");
+            }
+            Console.WriteLine();
         }
 
         public void PickUpItem(ParentItem item, bool remove = false)
