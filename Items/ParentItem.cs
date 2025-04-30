@@ -32,7 +32,5 @@ namespace DungeonExplorer
         private HashSet<string> _validCategories = new HashSet<string> { "Weapon", "Armour", "Consumable" };
 
         public ParentItem() { }
-
-        public abstract void DisplayDescription();
     }
 }

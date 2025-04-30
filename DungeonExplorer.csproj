@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Items\INeedsDescription.cs" />
     <Compile Include="Map\Containers\InfectedPile.cs" />
     <Compile Include="Map\Containers\LeftoverPouch.cs" />
     <Compile Include="Map\Containers\DeceasedBody.cs" />
