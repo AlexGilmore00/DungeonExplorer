@@ -28,7 +28,7 @@ namespace DungeonExplorer
                 ParentEnemy enemy = (ParentEnemy)entity;
                 enemy.TakeDamage(-30);
             }
-            Console.WriteLine($"the item was used on {entity.Name} and they gained 15 hp\n" +
+            Console.WriteLine($"the item was used on {entity.Name} and they gained 30 hp\n" +
                 $"{entity.Name} is at {entity.Health}/{entity.MaxHealth}\n");
         }
     }

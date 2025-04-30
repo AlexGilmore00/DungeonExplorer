@@ -54,7 +54,7 @@ namespace DungeonExplorer
         public static readonly Attack GroundSlam = new Attack("Ground Slam", 2,
             isCharge: true, chargeTurns: 1, chargeMessage: "raises their arms in the air");
         public static readonly Attack LabouredPunch = new Attack("Laboured Punch", 3.2,
-            isCharge: true, chargeTurns: 1, chargeMessage: "slowly tries to stand up");
+            isCharge: true, chargeTurns: 2, chargeMessage: "slowly tries to stand up");
 
         //
         // slime type

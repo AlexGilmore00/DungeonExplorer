@@ -106,7 +106,8 @@ namespace DungeonExplorer
             while (true)
             {
                 Console.WriteLine("what action would you like to take?\n" +
-                    "[1] attack enemy\n");
+                    "[1] attack enemy\n" +
+                    "[2] open player menu");
 
                 ConsoleKeyInfo input = Console.ReadKey(true);
 
@@ -117,6 +118,11 @@ namespace DungeonExplorer
                     case ConsoleKey.NumPad1:
                         player.DealDamageTo(player, enemy);
                         return;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        Console.WriteLine();
+                        PlayerMenu.OpenPlayerMenu(player);
+                        break;
                     default:
                         Console.WriteLine("unknown command...");
                         break;

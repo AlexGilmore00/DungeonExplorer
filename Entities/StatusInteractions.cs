@@ -41,6 +41,13 @@ namespace DungeonExplorer
                         Console.WriteLine($"{entity.Name} has been strengthened for {duration} turns");
                     }
                     break;
+                case StatusIds.Poison:
+                    if (!AlreadyApplied(entity, statusId, duration))
+                    {
+                        entity.StatusEffects.Add(new Status("Poison", (int)StatusIds.Strength, duration));
+                        Console.WriteLine($"{entity.Name} has been afflicted with poison for {duration} turns");
+                    }
+                    break;
             }
         }
 
