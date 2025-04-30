@@ -40,7 +40,6 @@ namespace DungeonExplorer
                 else { break; }
             }
             Player = new Player(name, 100, 5, 0);
-            Test.SetupTestInventory(Player);
             Console.WriteLine();
         }
 
