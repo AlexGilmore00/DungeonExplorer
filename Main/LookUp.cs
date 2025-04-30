@@ -141,31 +141,19 @@ namespace DungeonExplorer
             {
                 "the walls are cold and damp, the cracks in the stone brick let a light breeze through. " +
                 "you cant tell whether the sounds you hear are feint screams or wind rushing through " +
-                "distant halls.",
-
-                "water runs down the stone walls. it seems to be seeping through small cracks in the " +
-                "floor. you can only wonder whats below here."
+                "distant halls."
             });
 
             // level two
             descriptions.Add(new List<string>
             {
-                "the floor seems to be covered in some sort of moss, it almost feels like theres nothing " +
-                "but earth beneath it. thick vines crawl up the wall and the occasional drop of water " +
-                "drops from the ceiling. the water from above must have lead to all this growth.",
-
-                "the walls seem to be almost entirely made of wood. not clean cut wood, but living " +
-                "wood, as if its still part of a tree. small branches extend off it with leaves. " +
-                "you wonder how it survives down here with no sunlight."
+                "placeholder lvl 2"
             });
 
             // level three
             descriptions.Add(new List<string>
             {
-                "the vines on the wall are thick. as you look at them, you notice they are almost " +
-                "pulsing, like some sort or artery. the thick layer moss beneath your feet " +
-                "rhythmically raises and falls like its breathing. just being here makes you " +
-                "feel uneasy. you want to leave as soon as possible"
+                "placeholder lvl 3"
             });
 
             return descriptions[difficulty][rnd.Next(0, descriptions[difficulty].Count)];
