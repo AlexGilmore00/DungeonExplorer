@@ -43,6 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Items\Consumables\GreaterHealingPotion.cs" />
+    <Compile Include="Items\Consumables\HealingPotion.cs" />
+    <Compile Include="Items\Equipables\Armour\Chest\ChainmailVest.cs" />
+    <Compile Include="Items\Equipables\Armour\Legs\ClothTrousers.cs" />
+    <Compile Include="Items\Equipables\Weapons\TwoHandede\Claymore.cs" />
+    <Compile Include="Items\Equipables\Weapons\Shield\Buckler.cs" />
     <Compile Include="Entities\Enemies\Level 3\Abomination.cs" />
     <Compile Include="Entities\Enemies\Level 1\BowSkeleton.cs" />
     <Compile Include="Entities\Enemies\Level 2\GrassSlime.cs" />
@@ -50,6 +56,12 @@
     <Compile Include="Entities\Enemies\Level 3\HardenedInfected.cs" />
     <Compile Include="Entities\Enemies\Bosses\FusedSkeletonPhalanx.cs" />
     <Compile Include="Entities\Enemies\Bosses\GiantGiardDog.cs" />
+    <Compile Include="Items\Equipables\Weapons\TwoHandede\Longbow.cs" />
+    <Compile Include="Items\Equipables\Weapons\OneHanded\Mace.cs" />
+    <Compile Include="Items\Equipables\Weapons\Shield\KiteShield.cs" />
+    <Compile Include="Items\Equipables\Armour\Feet\LeatherShoes.cs" />
+    <Compile Include="Items\Equipables\Armour\Chest\LightGambeson.cs" />
+    <Compile Include="Items\Equipables\Armour\Legs\LeatherChausses.cs" />
     <Compile Include="Map\Rooms\BossRoom.cs" />
     <Compile Include="Entities\Enemies\AttackTypes.cs" />
     <Compile Include="Entities\Enemies\Attack.cs" />
@@ -75,14 +87,19 @@
     <Compile Include="Items\Equipables\Armour\ParentArmour.cs" />
     <Compile Include="Main\Menus\PlayerMenu.cs" />
     <Compile Include="Entities\Enemies\Level 3\Mumbler.cs" />
+    <Compile Include="Items\Equipables\Armour\Head\PaddedHood.cs" />
+    <Compile Include="Items\Equipables\Armour\Feet\PlateBoots.cs" />
+    <Compile Include="Items\Equipables\Armour\Chest\PlateCuirass.cs" />
+    <Compile Include="Items\Equipables\Armour\Head\PlateHelm.cs" />
+    <Compile Include="Items\Equipables\Armour\Legs\PlateLegs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Map\Rooms\DefaultRoom.cs" />
-    <Compile Include="Items\Equipables\Weapons\TesterSword.cs" />
-    <Compile Include="Items\Equipables\Armour\TesterHelm.cs" />
+    <Compile Include="Items\Equipables\Weapons\OneHanded\TesterSword.cs" />
+    <Compile Include="Items\Equipables\Armour\Head\TesterHelm.cs" />
     <Compile Include="Items\Consumables\TesterPotion.cs" />
     <Compile Include="Main\Menus\RoomMoveMenu.cs" />
-    <Compile Include="Items\Equipables\Weapons\TesterZwei.cs" />
-    <Compile Include="Items\Equipables\Weapons\TesterShield.cs" />
+    <Compile Include="Items\Equipables\Weapons\TwoHandede\TesterZwei.cs" />
+    <Compile Include="Items\Equipables\Weapons\Shield\TesterShield.cs" />
     <Compile Include="Entities\Status.cs" />
     <Compile Include="Entities\StatusIds.cs" />
     <Compile Include="Entities\StatusInteractions.cs" />
@@ -91,6 +108,13 @@
     <Compile Include="Entities\Enemies\Level 1\SwordSkeleton.cs" />
     <Compile Include="Entities\Enemies\Level 2\TreeEnt.cs" />
     <Compile Include="Entities\Enemies\Bosses\TheHeart.cs" />
+    <Compile Include="Items\Equipables\Weapons\OneHanded\ParingKnife.cs" />
+    <Compile Include="Items\Equipables\Weapons\TwoHandede\RustedSheers.cs" />
+    <Compile Include="Items\Equipables\Weapons\Shield\LargeWoodenLid.cs" />
+    <Compile Include="Items\Equipables\Weapons\OneHanded\Warpick.cs" />
+    <Compile Include="Items\Equipables\Armour\Head\StrawHat.cs" />
+    <Compile Include="Items\Equipables\Armour\Feet\SturdyBoots.cs" />
+    <Compile Include="Items\Consumables\StrengthPotion.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

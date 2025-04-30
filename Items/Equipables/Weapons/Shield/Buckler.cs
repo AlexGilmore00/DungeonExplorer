@@ -6,19 +6,20 @@ using System.Threading.Tasks;
 
 namespace DungeonExplorer
 {
-    internal class TesterShield : ParentWeapon
+    public class Buckler : ParentWeapon
     {
-        public TesterShield()
+        public Buckler()
         {
-            Name = "TesterShield";
+            Name = "Buckler";
             _baseName = Name;
             Category = "Weapon";
             Slot = "Lhand";
             Attack = 0;
-            Defence = 2;
+            Defence = 10;
             IsTwoHanded = false;
-            IsShield = false;
-            _flavourText = "a shield used for testing";
+            IsShield = true;
+            _flavourText = "a light buckler shield. Small " +
+                "and handy to carry but still very effective";
         }
     }
 }

@@ -88,11 +88,16 @@ namespace DungeonExplorer
             string lhand;
             if (player.EqWeapon["Lhand"] != null) { lhand = player.EqWeapon["Lhand"].Name; } else { lhand = "nothing"; }
 
+            // get damage reduction
+            double DamageReduction = (double)player.CurrentDefence / ((double)player.CurrentDefence + 50);
+            DamageReduction *= 100;
+            DamageReduction = Math.Round(DamageReduction, 1);
 
             Console.WriteLine($"name: {player.Name}\n" +
                 $"health: {player.Health}/{player.MaxHealth}\n" +
                 $"Current Damage: {player.CurrentAtkDmg}\n" +
-                $"Cuttent Defence: {player.CurrentDefence}\n" +
+                $"Current Defence: {player.CurrentDefence}\n" +
+                $"Current Damage Reduction: {DamageReduction}%" +
                 $"\n" +
                 $"EQUIPPED ITEMS\n" +
                 $"head: {head}\n" +
@@ -270,7 +275,7 @@ namespace DungeonExplorer
         // menu for how you can interact with an item once selected from the inventory
         // can inspect all items
         // can equip equipables
-        // can use consumables !!NEEDS ADDING!!
+        // can use consumables !!consumables can only be used on player currently!!
         // returns true to send the player back to the OpenPlayerMenu
         // returns false to send the player back to PresentItemList
         {
@@ -474,7 +479,7 @@ namespace DungeonExplorer
                         continue;
                 }
 
-                // set the players ionventory to the sorted list
+                // set the players inventory to the sorted list
                 player.SetInventory(sortedList, sortedList[0].Category);
                 return;
             }

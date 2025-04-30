@@ -51,7 +51,7 @@ namespace DungeonExplorer
             int attack = player.CurrentAtkDmg;
             int defence = enemy.CurrentDefence;
 
-            double damageReduction = defence / (defence + 50);
+            double damageReduction = (double)defence / ((double)defence + 50);
             double damageDouble = attack * (1 - damageReduction);
             int damage = (int)damageDouble;
 

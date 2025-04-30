@@ -39,7 +39,8 @@ namespace DungeonExplorer
                 }
                 else { break; }
             }
-            Player = new Player(name, 100, 10, 5);
+            Player = new Player(name, 100, 5, 0);
+            Test.SetupTestInventory(Player);
             Console.WriteLine();
         }
 
@@ -48,7 +49,7 @@ namespace DungeonExplorer
         {
             LevelComplete = false;
             _testing = true;
-            Player = new Player("player", 100, 10, 5);
+            Player = new Player("player", 100, 5, 0);
         }
 
         public void Start()

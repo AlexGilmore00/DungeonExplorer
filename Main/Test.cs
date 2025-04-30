@@ -184,8 +184,8 @@ namespace DungeonExplorer
             Console.WriteLine("TEST: testing player equip and unequip\n");
 
             // player base stats
-            int baseDmg = 10;
-            int baseDef = 5;
+            int baseDmg = 5;
+            int baseDef = 0;
 
             // set up objects
             ParentWeapon sword = new TesterSword();
