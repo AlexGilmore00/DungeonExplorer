@@ -27,11 +27,14 @@ namespace DungeonExplorer
             // default strength values for those it applies to
             switch (id)
             {
-                case 1:
+                case 1:  // Bleed
                     Strength = 4;
                     break;
-                case 2:
+                case 2:  // Strength
                     Strength = 5;
+                    break;
+                case 3:  //Poison
+                    Strength = 2;
                     break;
             }
         }

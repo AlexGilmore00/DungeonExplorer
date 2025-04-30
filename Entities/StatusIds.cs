@@ -10,6 +10,7 @@ namespace DungeonExplorer
     {
         Stun,
         Bleed,
-        Strength
+        Strength,
+        Poison
     }
 }

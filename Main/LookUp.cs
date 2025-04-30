@@ -37,38 +37,44 @@ namespace DungeonExplorer
                 case 0:
                     enemySet = new List<ParentEnemy>()
                     {
-                        new TestEnemy()
+                        new BowSkeleton(),
+                        new ShieldSkeleton(),
+                        new SwordSkeleton(),
                     };
                     break;
                 case 1:
                     enemySet = new List<ParentEnemy>()
                     {
-                        new TestEnemy()
+                        new GrassSlime(),
+                        new LivingMushroom(),
+                        new TreeEnt(),
                     };
                     break;
                 case 2:
                     enemySet = new List<ParentEnemy>()
                     {
-                        new TestEnemy()
+                        new Abomination(),
+                        new HardenedInfected(),
+                        new Mumbler(),
                     };
                     break;
                 // bosses
                 case 10:
                     enemySet = new List<ParentEnemy>()
                     {
-                        new TestBoss()
+                        new FusedSkeletonPhalanx(),
                     };
                     break;
                 case 11:
                     enemySet = new List<ParentEnemy>()
                     {
-                        new TestBoss()
+                        new GiantGiardDog(),
                     };
                     break;
                 case 12:
                     enemySet = new List<ParentEnemy>()
                     {
-                        new TestBoss()
+                        new TheHeart(),
                     };
                     break;
                 default:

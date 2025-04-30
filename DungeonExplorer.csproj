@@ -43,6 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Enemies\Level 3\Abomination.cs" />
+    <Compile Include="Entities\Enemies\Level 1\BowSkeleton.cs" />
+    <Compile Include="Entities\Enemies\Level 2\GrassSlime.cs" />
+    <Compile Include="Entities\Enemies\Level 2\LivingMushroom.cs" />
+    <Compile Include="Entities\Enemies\Level 3\HardenedInfected.cs" />
+    <Compile Include="Entities\Enemies\Bosses\FusedSkeletonPhalanx.cs" />
+    <Compile Include="Entities\Enemies\Bosses\GiantGiardDog.cs" />
     <Compile Include="Map\Rooms\BossRoom.cs" />
     <Compile Include="Entities\Enemies\AttackTypes.cs" />
     <Compile Include="Entities\Enemies\Attack.cs" />
@@ -67,6 +74,7 @@
     <Compile Include="Items\Equipables\Weapons\ParentWeapon.cs" />
     <Compile Include="Items\Equipables\Armour\ParentArmour.cs" />
     <Compile Include="Main\Menus\PlayerMenu.cs" />
+    <Compile Include="Entities\Enemies\Level 3\Mumbler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Map\Rooms\DefaultRoom.cs" />
     <Compile Include="Items\Equipables\Weapons\TesterSword.cs" />
@@ -79,6 +87,10 @@
     <Compile Include="Entities\StatusIds.cs" />
     <Compile Include="Entities\StatusInteractions.cs" />
     <Compile Include="Entities\Enemies\Bosses\TestBoss.cs" />
+    <Compile Include="Entities\Enemies\Level 1\ShieldSkeleton.cs" />
+    <Compile Include="Entities\Enemies\Level 1\SwordSkeleton.cs" />
+    <Compile Include="Entities\Enemies\Level 2\TreeEnt.cs" />
+    <Compile Include="Entities\Enemies\Bosses\TheHeart.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

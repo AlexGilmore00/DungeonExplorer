@@ -15,10 +15,6 @@ namespace DungeonExplorer
     {
         // class used for static function calls to test implementation
 
-        // !!add a RunMainTests function that instanciates a game object and from there
-        // runs main tests on all functions to see if inputs will be ok and all errors
-        // handled. output the reports of these tests into a text file!!
-
         public static void ExecMainTests()
         {
             Game game = new Game(testing: true);
@@ -31,26 +27,26 @@ namespace DungeonExplorer
             {
                 TestRoomGeneration(i);
             }
-            Console.WriteLine("press any key to continu0e...");
+            Console.WriteLine("press any key to continue...");
             Console.ReadKey(true);
             TestLevelGeneration();
-            Console.WriteLine("press any key to continu0e...");
+            Console.WriteLine("press any key to continue...");
             Console.ReadKey(true);
             TestItemGenerationAndContainers();
 
             // living entity functionality, including player pick up
             // player equip and unequip, and status effects
             Console.WriteLine("TESTING LIVING ENTITY FUNCTIONALITY::");
-            Console.WriteLine("press any key to continu0e...");
+            Console.WriteLine("press any key to continue...");
             Console.ReadKey(true);
             SetupTestInventory(game.Player);
-            Console.WriteLine("press any key to continu0e...");
+            Console.WriteLine("press any key to continue...");
             Console.ReadKey(true);
             TestEquipAndUnequip(game.Player);
-            Console.WriteLine("press any key to continu0e...");
+            Console.WriteLine("press any key to continue...");
             Console.ReadKey(true);
             TestStatusEffects(game.Player);
-            Console.WriteLine("press any key to continu0e...");
+            Console.WriteLine("press any key to continue...");
             Console.ReadKey(true);
             Console.WriteLine();
         }

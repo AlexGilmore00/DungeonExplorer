@@ -115,6 +115,18 @@ namespace DungeonExplorer
                             removeList.Add(status);
                         }
                         break;
+                    case (int)StatusIds.Poison:
+                        if (status.Duration > 0)
+                        {
+                            Console.WriteLine($"{entity.Name} took {status.Strength} damage " +
+                                $"from poison");
+                            ApplyDamage(entity, status.Strength);
+                        }
+                        else
+                        {
+                            removeList.Add(status);
+                        }
+                        break;
                     default:
                         Console.WriteLine($"WARNING!!a status {status.Name} with an invalid " +
                             $"status id {status.ID} has been given to {entity.Name}");
