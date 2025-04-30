@@ -51,13 +51,14 @@ namespace DungeonExplorer
             int attack = player.CurrentAtkDmg;
             int defence = enemy.CurrentDefence;
 
-            int damage = attack - defence;
-            // dont call to deal damage if no damage is dealt
-            if (damage <= 0) { damage = 0; }
-            else
-            {
-                enemy.TakeDamage(damage);
-            }
+            double damageReduction = (double)defence / ((double)defence + 50);
+            double damageDouble = attack * (1 - damageReduction);
+            int damage = (int)damageDouble;
+
+            // deal a minimum of 1 damage
+            if (damage <= 0) { damage = 1; }
+
+            enemy.TakeDamage(damage);
             Console.WriteLine($"{enemy.Name} took {damage} damage");
         }
 

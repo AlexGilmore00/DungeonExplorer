@@ -30,7 +30,9 @@ namespace DungeonExplorer
                 int attack = (int)attackDecimal;
                 int defence = player.CurrentDefence;
 
-                int damage = attack - defence;
+                double damageReduction = (double)defence / ((double)defence + 50);
+                double damageDouble = attack * (1 - damageReduction);
+                int damage = (int)damageDouble;
 
                 // deal a minimum of 1 damage
                 if (damage <= 0) { damage = 1; }
